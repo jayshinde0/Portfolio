@@ -8,7 +8,6 @@ const About = () => {
     { name: 'JavaScript', level: 90, icon: Code },
     { name: 'jQuery', level: 85, icon: Code },
     { name: 'React', level: 88, icon: Code },
-    { name: 'Spring Boot', level: 80, icon: Database },
     { name: 'Python', level: 75, icon: Code },
   ];
 
