@@ -76,7 +76,7 @@ const About = () => {
                         }}
                       />
                       <img
-                        src="/Jay.jpeg"
+                        src="/JAY_2.jpg"
                         alt="Jay Shinde"
                         className="relative w-32 h-32 rounded-full object-cover border-4 border-gradient-to-r from-cyan-400 to-purple-600 shadow-2xl"
                       />
