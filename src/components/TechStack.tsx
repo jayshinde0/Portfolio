@@ -539,24 +539,6 @@ const TechStack = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
           >
             {[
-              { 
-                label: 'Programming Languages', 
-                count: technologies.filter(t => t.category === 'Programming').length, 
-                icon: '💻',
-                color: 'from-blue-500 to-cyan-500'
-              },
-              { 
-                label: 'Frameworks & Libraries', 
-                count: technologies.filter(t => ['Frontend', 'Backend'].includes(t.category)).length, 
-                icon: '🚀',
-                color: 'from-purple-500 to-pink-500'
-              },
-              { 
-                label: 'Tools & Databases', 
-                count: technologies.filter(t => ['Database', 'Tools', 'CMS', 'Server'].includes(t.category)).length, 
-                icon: '🛠️',
-                color: 'from-green-500 to-emerald-500'
-              },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
