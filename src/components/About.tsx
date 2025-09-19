@@ -3,13 +3,17 @@ import { motion } from 'framer-motion';
 import { Code, Palette, Database, Smartphone, GraduationCap, Briefcase } from 'lucide-react';
 
 const About = () => {
-  const skills = [
-    { name: 'HTML/CSS', level: 95, icon: Palette },
-    { name: 'JavaScript', level: 90, icon: Code },
-    { name: 'jQuery', level: 85, icon: Code },
-    { name: 'React', level: 88, icon: Code },
-    { name: 'Python', level: 75, icon: Code },
-  ];
+ const skills = [
+  { name: 'React.js', level: 88, icon: Code },
+  { name: 'Next.js', level: 85, icon: Code },
+  { name: 'Java', level: 80, icon: Code },
+  { name: 'C/C++', level: 82, icon: Code },
+  { name: 'Node.js', level: 75, icon: Code },
+  { name: 'Express.js', level: 74, icon: Code },
+  { name: 'MongoDB', level: 78, icon: Code },
+  { name: 'Docker', level: 60, icon: Code },
+];
+
 
   const containerVariants = {
     hidden: { opacity: 0 },

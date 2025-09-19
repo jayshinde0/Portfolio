@@ -104,20 +104,7 @@ const Footer = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-gray-500 text-sm flex items-center gap-2"
           >
-            <span>© 2024 Jay Shinde. Made with</span>
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              <Heart className="w-4 h-4 text-red-500" />
-            </motion.div>
-            <span>and lots of coffee</span>
+
           </motion.div>
 
           {/* Scroll to Top */}

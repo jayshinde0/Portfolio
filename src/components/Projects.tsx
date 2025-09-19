@@ -12,7 +12,7 @@ const Projects = () => {
       shortDescription: 'AI-powered question paper generation system using Bloom\'s Taxonomy and machine learning',
       fullDescription: 'This project aims to automate the creation of question papers by using Bloom\'s Taxonomy and machine learning techniques. The system helps educators generate questions across various cognitive levels, from basic recall to critical analysis, ensuring diverse and well-balanced assessments. The integration of machine learning algorithms allows for the automatic prediction of marks and categorization of questions based on cognitive complexity.',
       techStack: ['Django', 'Python', 'Scikit-learn', 'Pandas', 'HTML', 'CSS', 'JavaScript'],
-      image: 'https://images.pexels.com/photos/5428836/pexels-photo-5428836.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: '/public/blooms.jpg',
       category: 'AI/ML',
       githubUrl: 'https://github.com/jayshinde0/Blooms-Taxonomy-Based-Question-Paper-Generation',
       liveUrl: 'https://blooms-taxonomy-generator.netlify.app',
@@ -33,7 +33,7 @@ const Projects = () => {
       shortDescription: 'Platform connecting local tailors with customers for affordable custom clothing',
       fullDescription: 'BudgeStitch is an innovative platform designed to connect local tailors with customers seeking affordable, high-quality custom clothing. The platform enables customers to select fabric directly from suppliers or provide their own, allowing for personalized and sustainable fashion choices at competitive prices.',
       techStack: ['Django', 'Python', 'HTML', 'CSS', 'JavaScript', 'SQLite', 'Git'],
-      image: 'https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: '/public/Budge.png',
       category: 'E-Commerce',
       githubUrl: 'https://github.com/jayshinde0/BudgeStitch',
       liveUrl: 'https://budgestitch.netlify.app',
@@ -114,7 +114,30 @@ const Projects = () => {
       duration: '3 weeks',
       team: 'Solo Project',
       status: 'Completed'
-    }
+    },
+    {
+  id: 6,
+  title: 'InterviewAce',
+  shortDescription: 'AI-powered interview preparation platform with personalized learning paths for technical interviews',
+  fullDescription: 'InterviewAce is an intelligent interview preparation platform designed to help users master technical interviews through AI-powered practice, mock interviews, and personalized learning paths. The application focuses on both coding interviews and aptitude tests, providing a comprehensive preparation environment.',
+  techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'React Context', 'JWT', 'Recharts', 'shadcn/ui'],
+  image: '/public/interview.png',
+  category: 'Full Stack',
+  githubUrl: 'https://github.com/jayshinde0/InterviewAcee',
+  liveUrl: '',
+  features: [
+    'AI-powered mock interviews with real-time feedback',
+    'Interactive coding problems with multiple language support',
+    'Comprehensive aptitude test preparation',
+    'Personalized learning paths and progress tracking',
+    'Performance analytics and statistics dashboard',
+    'Dark/Light mode with responsive design'
+  ],
+  duration: '6 months',
+  team: 'Solo Project',
+  status: 'Live'
+},
+    
   ];
 
   const containerVariants = {
