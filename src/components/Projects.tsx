@@ -69,7 +69,7 @@ const Projects = () => {
       ],
       duration: '2 months',
       team: 'Solo Project',
-      status: 'Completed'
+      status: 'In progress'
     },
     {
       id: 4,
@@ -99,7 +99,7 @@ const Projects = () => {
       shortDescription: 'React-based travel destinations showcase with interactive cards',
       fullDescription: 'The Tourism App is a React-based web application that displays popular travel destinations in interactive cards. Each card features an image, a brief description, and a "Not Interested" button. Clicking the button removes the card, ensuring a clean browsing experience for users exploring travel options.',
       techStack: ['React', 'CSS3', 'JavaScript', 'Responsive Design'],
-      image: 'https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: '/Tourism.png',
       category: 'Frontend',
       githubUrl: 'https://github.com/jayshinde0/Tourism-App',
       liveUrl: 'https://jayshinde0.github.io/Tourism-app/',
@@ -135,8 +135,31 @@ const Projects = () => {
   ],
   duration: '6 months',
   team: 'Solo Project',
-  status: 'Live'
+  status: 'In progress'
 },
+{
+  id: 7,
+  title: 'Debugger’s Club Website',
+  shortDescription: 'Official website for Debugger’s Club with event registration, data management, and club information',
+  fullDescription: 'The Debugger’s Club Website is the official platform for our college’s Debugger’s Club, designed to showcase club information and seamlessly manage event registrations. On the frontend, it highlights club activities, achievements, and updates. The backend handles event registration forms where participants can submit details such as name, email, phone number, transaction ID, and upload payment screenshots. All submissions are securely stored in MongoDB and Cloudinary, with integrated export functionality to Google Sheets for streamlined event management.',
+  techStack: ['Next.js', 'React', 'Tailwind CSS', 'MongoDB', 'Cloudinary', 'Google Sheets API'],
+  image: 'Debuggers.png',
+  category: 'Full Stack',
+  githubUrl: '', 
+  liveUrl: 'https://debuggers-club.vercel.app/',
+  features: [
+    'Club information and event highlights',
+    'Event registration with participant details form',
+    'Cloudinary integration for payment screenshot uploads',
+    'Secure storage of data in MongoDB',
+    'Automated export of event data to Google Sheets',
+    'Responsive and modern UI for students and organizers'
+  ],
+  duration: '3 months',
+  team: 'Team Project',
+  status: 'Live'
+}
+
     
   ];
 

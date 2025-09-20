@@ -103,6 +103,34 @@ const TechStack = () => {
       category: 'Tools', 
       level: 'Advanced' 
     },
+    { 
+    name: 'MongoDB', 
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', 
+    color: 'from-green-400 to-green-600', 
+    category: 'Database', 
+    level: 'Intermediate' 
+  },
+  { 
+    name: 'Express.js', 
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg', 
+    color: 'from-gray-400 to-gray-600', 
+    category: 'Backend', 
+    level: 'Intermediate' 
+  },
+  { 
+    name: 'Node.js', 
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', 
+    color: 'from-green-500 to-green-700', 
+    category: 'Backend', 
+    level: 'Intermediate' 
+  },
+  { 
+    name: 'Next.js', 
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg', 
+    color: 'from-gray-600 to-gray-800', 
+    category: 'Frontend', 
+    level: 'Intermediate' 
+  }
   ];
 
   const categories = ['All', 'Programming', 'Frontend', 'Backend', 'Database', 'Tools', 'CMS', 'Server'];
