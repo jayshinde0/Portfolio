@@ -1,0 +1,243 @@
+/* ===============================
+   🌙 TERMINAL STYLESHEET
+   Interactive Developer Portfolio
+   =============================== */
+
+/* Terminal Container */
+.terminal-container {
+  width: 100%;
+  max-width: 900px;
+  height: 600px;
+  background: #0a0e17;
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(0, 255, 157, 0.1);
+  border: 1px solid #1e90ff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 2rem auto;
+  font-family: 'Fira Code', monospace;
+  color: #00ff9d;
+  cursor: text;
+}
+
+/* Terminal Header */
+.terminal-header {
+  background: #1a1e29;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  user-select: none;
+}
+
+.window-controls {
+  display: flex;
+  gap: 8px;
+  margin-right: 15px;
+}
+
+.control {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.control:hover {
+  opacity: 0.8;
+}
+
+.close {
+  background: #ff5f56;
+}
+
+.minimize {
+  background: #ffbd2e;
+}
+
+.title {
+  color: #888;
+  font-size: 0.9rem;
+  flex-grow: 1;
+  text-align: center;
+  user-select: none;
+  font-family: 'Fira Code', monospace;
+}
+
+/* Terminal Body */
+.terminal-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #0a0e17;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  position: relative;
+}
+
+/* Scrollbar */
+.terminal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+  background: #4a9e75;
+  border-radius: 4px;
+}
+
+/* Command Line */
+.command-line {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  position: relative;
+  width: 100%;
+}
+
+.prompt {
+  color: #ff6b6b;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+.command-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #00ff9d;
+  font-family: 'Fira Code', monospace;
+  font-size: 1.1rem;
+  outline: none;
+  caret-color: #00ff9d;
+  padding: 8px 0;
+  width: 100%;
+}
+
+/* Cursor Blinking Animation */
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 20px;
+  background-color: #00ff9d;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes blink {
+  from, to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Output Styling */
+.output {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.output-line {
+  margin: 10px 0;
+}
+
+.error {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+/* Text Styling */
+.highlight {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.command {
+  color: #4cc9f0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.command:hover {
+  text-decoration: underline;
+}
+
+/* List Styles */
+ul.skills-list,
+ul.projects-list,
+ul.experience-list,
+ul.contact-list,
+ul.commands-list {
+  list-style: none;
+  padding-left: 15px;
+  margin: 10px 0;
+}
+
+ul.skills-list li,
+ul.projects-list li,
+ul.experience-list li,
+ul.contact-list li,
+ul.commands-list li {
+  margin: 12px 0;
+  position: relative;
+  padding-left: 20px;
+}
+
+ul.skills-list li::before,
+ul.projects-list li::before,
+ul.experience-list li::before,
+ul.commands-list li::before {
+  content: "▹";
+  position: absolute;
+  left: 0;
+  color: #ff6b6b;
+}
+
+/* Links */
+a {
+  color: #4cc9f0;
+  text-decoration: none;
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #4cc9f0;
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .terminal-container {
+    width: 95%;
+    height: 70vh;
+  }
+
+  .terminal-body {
+    padding: 15px;
+    font-size: 1rem;
+  }
+}
