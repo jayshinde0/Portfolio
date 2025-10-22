@@ -380,9 +380,10 @@ setTimeout(() => {
 
 
 
-  useEffect(() => {
+  // Focus input when terminal is clicked, not on page load
+  const handleTerminalClick = () => {
     inputRef.current?.focus();
-  }, []);
+  };
 
   useEffect(() => {
     setOutput([
@@ -422,7 +423,7 @@ setTimeout(() => {
         transition={{ duration: 0.3 }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => inputRef.current?.focus()}
+        onClick={handleTerminalClick}
       >
         {/* Header */}
         <div className="bg-black px-6 py-3 border-b border-cyan-400/30 flex items-center">
@@ -464,7 +465,7 @@ setTimeout(() => {
               onKeyDown={handleKeyDown}
               className="flex-1 bg-transparent text-cyan-400 outline-none font-mono"
               placeholder="Type a command..."
-              autoFocus 
+ 
             />
             <span className="ml-2 w-2 h-5 bg-cyan-400 animate-pulse"></span>
           </div>

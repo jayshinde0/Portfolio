@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, Heart, Code, Coffee, Zap, Star } from 'lucide-react';
+import { Github, Linkedin, Mail, Heart } from 'lucide-react';
 
 const Footer = () => {
   const [currentQuote, setCurrentQuote] = useState(0);
@@ -19,14 +19,9 @@ const Footer = () => {
     "Programming isn't about what you know; it's about what you can figure out."
   ];
 
-  const stats = [
-    { icon: Code, label: 'Lines of Code', value: '50K+', color: 'text-cyan-400' },
-    { icon: Coffee, label: 'Cups of Coffee', value: '1000+', color: 'text-yellow-400' },
-    { icon: Zap, label: 'Projects Built', value: '15+', color: 'text-purple-400' },
-    { icon: Star, label: 'GitHub Stars', value: '100+', color: 'text-green-400' },
-  ];
 
-  const matrixChars = '010110100101101001011010010110100101101001011010010110100101101001'.split('');
+
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -36,34 +31,8 @@ const Footer = () => {
   }, [codingQuotes.length]);
 
   return (
-    <footer className="relative py-12 px-4 mt-20 overflow-hidden">
-      {/* Matrix Background */}
-      <div className="absolute inset-0 opacity-10">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-green-400 text-xs font-mono"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          >
-            {matrixChars[Math.floor(Math.random() * matrixChars.length)]}
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+    <footer className="relative py-12 px-4 overflow-hidden">
+      {/* No background - inherit from parent App component */}
 
       <div className="relative max-w-6xl mx-auto">
         <div className="flex flex-col items-center text-center">
@@ -144,40 +113,7 @@ const Footer = () => {
             </motion.p>
           </motion.div>
 
-          {/* Fun Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 w-full max-w-2xl"
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="text-center p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-white/20 transition-all duration-300 group"
-                whileHover={{ scale: 1.05, y: -2 }}
-              >
-                <motion.div
-                  className={`${stat.color} mb-2 flex justify-center`}
-                  animate={{
-                    rotate: [0, 10, -10, 0],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: index * 0.5,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <stat.icon className="w-6 h-6" />
-                </motion.div>
-                <div className="text-white font-bold text-lg">{stat.value}</div>
-                <div className="text-gray-400 text-xs">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
+
 
           {/* Quick Links */}
           <motion.div
@@ -210,7 +146,7 @@ const Footer = () => {
           {/* Scroll to Top */}
           <motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="mt-8 p-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full text-white group"
+            className="mt-2 p-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full text-white group"
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0 }}

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, CheckCircle, Linkedin, Github, AlertCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
 const Contact = () => {
@@ -13,10 +13,14 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
 
-  // EmailJS configuration - You'll need to replace these with your actual values
-  // const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-  // const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-  // const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+  // Initialize EmailJS
+  useEffect(() => {
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    if (publicKey && publicKey !== 'your_public_key_here') {
+      emailjs.init(publicKey);
+      console.log('EmailJS initialized with public key:', publicKey);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -28,9 +32,6 @@ const Contact = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log('Public Key:', import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
-    console.log('Service ID:', import.meta.env.VITE_EMAILJS_SERVICE_ID);
-    console.log('Template ID:', import.meta.env.VITE_EMAILJS_TEMPLATE_ID);
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
@@ -50,33 +51,81 @@ const Contact = () => {
       return;
     }
 
+    // Get EmailJS configuration
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    console.log('EmailJS Config:', { serviceId, templateId, publicKey });
+
+    // Check if EmailJS is properly configured
+    if (!serviceId || !templateId || !publicKey ||
+      serviceId === 'your_service_id_here' ||
+      templateId === 'your_template_id_here' ||
+      publicKey === 'your_public_key_here') {
+
+      console.log('EmailJS not configured, using fallback');
+      // Fallback: Open email client with pre-filled content
+      const subject = encodeURIComponent(`Message from ${formData.name}`);
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      );
+      const mailtoLink = `mailto:jayshinde4554@gmail.com?subject=${subject}&body=${body}`;
+
+      window.open(mailtoLink, '_blank');
+      setError('Opened your email client. Please send the message from there.');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
+      console.log('Attempting to send email via EmailJS...');
+      console.log('Using service:', serviceId);
+      console.log('Using template:', templateId);
+
+      // Prepare template parameters
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_name: 'Jay Shinde',
+        reply_to: formData.email,
+      };
+
+      console.log('Template params:', templateParams);
+
       // Send email using EmailJS
       const result = await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
-          to_name: 'Jay Shinde', // Your name
-          reply_to: formData.email,
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        serviceId,
+        templateId,
+        templateParams
       );
 
       console.log('Email sent successfully:', result);
-      setIsSubmitted(true);
 
-      // Reset form after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setFormData({ name: '', email: '', message: '' });
-      }, 5000);
+      if (result.status === 200) {
+        setIsSubmitted(true);
+        // Reset form after 5 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({ name: '', email: '', message: '' });
+        }, 5000);
+      } else {
+        throw new Error(`EmailJS returned status: ${result.status}`);
+      }
 
     } catch (error) {
       console.error('Email sending failed:', error);
-      setError('Failed to send message. Please try again or contact me directly.');
+
+      // Fallback: Open email client
+      const subject = encodeURIComponent(`Message from ${formData.name}`);
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      );
+      const mailtoLink = `mailto:jayshinde4554@gmail.com?subject=${subject}&body=${body}`;
+
+      window.open(mailtoLink, '_blank');
+      setError('Email service unavailable. Opened your email client as fallback.');
     } finally {
       setIsSubmitting(false);
     }
@@ -106,24 +155,7 @@ const Contact = () => {
     }
   ];
 
-  const socialLinks = [
-    {
-      icon: Linkedin,
-      label: 'LinkedIn',
-      value: 'linkedin.com/in/jayshinde10',
-      color: 'from-blue-400 to-blue-600',
-      href: 'https://www.linkedin.com/in/jayshinde10/'
-    },
-    {
-      icon: Github,
-      label: 'GitHub',
-      value: 'github.com/jayshinde0',
-      color: 'from-gray-400 to-gray-600',
-      href: 'https://github.com/jayshinde0'
-    },
 
-
-  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -138,14 +170,7 @@ const Contact = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+    visible: { opacity: 1, y: 0 }
   };
 
   return (
@@ -159,6 +184,7 @@ const Contact = () => {
         >
           <motion.h2
             variants={itemVariants}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-4xl md:text-5xl font-bold text-center mb-16 font-orbitron"
           >
             <span className="bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">
@@ -170,6 +196,7 @@ const Contact = () => {
             {/* Contact Information */}
             <motion.div
               variants={itemVariants}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               className="space-y-8"
             >
               <div className="relative">
@@ -185,7 +212,7 @@ const Contact = () => {
                   </p>
 
                   <div className="space-y-4 mb-8">
-                    {contactInfo.map((info, index) => (
+                    {contactInfo.map((info) => (
                       <motion.a
                         key={info.label}
                         href={info.href}
@@ -222,6 +249,7 @@ const Contact = () => {
             {/* Contact Form */}
             <motion.div
               variants={itemVariants}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-600 rounded-2xl blur-xl opacity-20"></div>

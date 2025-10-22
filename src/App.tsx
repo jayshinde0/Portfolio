@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -11,6 +11,51 @@ import AchievementsPage from './pages/AchievementsPage';
 import TechStackPage from './pages/TechStackPage';
 import ContactPage from './pages/ContactPage';
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
+function AppContent() {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
+  return (
+    <>
+      {/* Scroll to top on route change */}
+      <ScrollToTop />
+      
+      {/* Navbar */}
+      <Navbar />
+      
+      {/* Main Content */}
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/experience" element={<WorkExperiencePage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/achievements" element={<AchievementsPage />} />
+          <Route path="/tech-stack" element={<TechStackPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
+      </motion.main>
+      
+      {/* Footer - Only show on non-home pages */}
+      {!isHomePage && <Footer />}
+    </>
+  );
+}
+
 function App() {
   return (
     <Router>
@@ -20,27 +65,7 @@ function App() {
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(120,119,198,0.3),transparent_50%)] pointer-events-none" />
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1),transparent_50%)] pointer-events-none" />
         
-        {/* Navbar */}
-        <Navbar />
-        
-        {/* Main Content */}
-        <motion.main
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/experience" element={<WorkExperiencePage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/achievements" element={<AchievementsPage />} />
-            <Route path="/tech-stack" element={<TechStackPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
-        </motion.main>
-        
-        <Footer />
+        <AppContent />
       </div>
     </Router>
   );
