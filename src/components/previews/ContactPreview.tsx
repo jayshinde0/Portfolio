@@ -80,19 +80,19 @@ const ContactPreview = () => {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
       value: "jayshinde4554@gmail.com",
-      color: "from-blue-400 to-cyan-500"
+      color: "bg-white text-black"
     },
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
       value: "+91 9370458094",
-      color: "from-green-400 to-emerald-500"
+      color: "bg-white text-black"
     },
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Location",
       value: "Nashik, Maharashtra, India",
-      color: "from-purple-400 to-pink-500"
+      color: "bg-white text-black"
     }
   ];
 
@@ -106,7 +106,7 @@ const ContactPreview = () => {
     <section className="py-16 px-4 relative">
       <div className="max-w-6xl mx-auto">
         {/* Card Container with Border */}
-        <div className="relative bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 shadow-2xl shadow-cyan-500/10">
+        <div className="relative bg-neutral-900/50 backdrop-blur-sm rounded-3xl border border-white/10 p-8 shadow-2xl">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -115,10 +115,10 @@ const ContactPreview = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             Get In Touch
           </h2>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
             Let's connect and discuss opportunities
           </p>
         </motion.div>
@@ -135,14 +135,14 @@ const ContactPreview = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="flex items-center gap-4 p-4 bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-xl hover:border-gray-600/50 transition-all duration-300"
+                className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl hover:border-white/20 transition-all duration-300"
               >
-                <div className={`p-3 rounded-xl bg-gradient-to-r ${method.color} text-white`}>
+                <div className={`p-3 rounded-xl ${method.color}`}>
                   {method.icon}
                 </div>
                 <div>
                   <h4 className="text-white font-semibold">{method.title}</h4>
-                  <p className="text-gray-400">{method.value}</p>
+                  <p className="text-gray-500">{method.value}</p>
                 </div>
               </motion.div>
             ))}
@@ -154,12 +154,12 @@ const ContactPreview = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6"
+            className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
           >
             <h3 className="text-xl font-bold text-white mb-6">Quick Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Debug info */}
-              <div className="text-xs text-gray-500 mb-2">
+              <div className="text-xs text-gray-600 mb-2">
                 Form Status: {formData.name ? '✓' : '✗'} Name | {formData.email ? '✓' : '✗'} Email | {formData.message ? '✓' : '✗'} Message
               </div>
               <input
@@ -168,7 +168,7 @@ const ContactPreview = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Your Name"
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400/50 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-white/30 focus:outline-none transition-colors"
                 required
               />
               <input
@@ -177,7 +177,7 @@ const ContactPreview = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Your Email"
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400/50 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-white/30 focus:outline-none transition-colors"
                 required
               />
               <textarea
@@ -186,20 +186,20 @@ const ContactPreview = () => {
                 onChange={handleChange}
                 placeholder="Your Message"
                 rows={3}
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400/50 focus:outline-none transition-colors resize-none"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-white/30 focus:outline-none transition-colors resize-none"
                 required
               ></textarea>
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-medium rounded-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-6 py-3 bg-white text-black font-medium rounded-lg hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               >
                 {isSubmitting ? (
                   <>
                     <motion.div
-                      className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                      className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full"
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     />
@@ -234,30 +234,19 @@ const ContactPreview = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`relative p-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-gray-400 ${social.color} transition-all duration-300 group`}
+                  className={`relative p-3 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-all duration-300 group`}
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   title={social.label}
                 >
                   <social.icon className="w-4 h-4" />
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"
-                    animate={{
-                      scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
                 </motion.a>
               ))}
             </div>
 
             {/* Quick Quote */}
             <div className="text-center mb-6">
-              <p className="text-gray-300 text-sm italic">
+              <p className="text-gray-500 text-sm italic">
                 "Let's build something amazing together"
               </p>
             </div>
@@ -266,7 +255,7 @@ const ContactPreview = () => {
             <div className="flex justify-center">
               <motion.button
                 onClick={() => navigate('/contact')}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-medium rounded-xl hover:shadow-xl transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-medium rounded-xl hover:bg-gray-200 transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -277,9 +266,9 @@ const ContactPreview = () => {
 
             {/* Mini Copyright */}
             <div className="text-center mt-6 pt-4 border-t border-white/5">
-              <p className="text-gray-500 text-xs flex items-center justify-center gap-2">
+              <p className="text-gray-600 text-xs flex items-center justify-center gap-2">
                 <span>© 2025 Jay Shinde</span>
-                <Heart className="w-3 h-3 text-red-500 animate-pulse" />
+                <Heart className="w-3 h-3 text-gray-500" />
                 <span>Made with passion</span>
               </p>
             </div>

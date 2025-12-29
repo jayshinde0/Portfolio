@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from './components/Navbar';
@@ -10,6 +10,7 @@ import ProjectsPage from './pages/ProjectsPage';
 import AchievementsPage from './pages/AchievementsPage';
 import TechStackPage from './pages/TechStackPage';
 import ContactPage from './pages/ContactPage';
+import Preloader from './components/Preloader';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -57,15 +58,21 @@ function AppContent() {
 }
 
 function App() {
+  const [showPreloader, setShowPreloader] = useState(true);
+
   return (
     <Router>
+      {/* Preloader */}
+      {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
+      
       <div className="min-h-screen bg-black text-white overflow-x-hidden">
-        {/* Background Effects */}
-        <div className="fixed inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20 pointer-events-none" />
-        <div className="fixed inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(120,119,198,0.3),transparent_50%)] pointer-events-none" />
-        <div className="fixed inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1),transparent_50%)] pointer-events-none" />
+        {/* Minimal Background - Black & White Theme */}
+        <div className="fixed inset-0 bg-black pointer-events-none z-0" />
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none z-0" />
         
-        <AppContent />
+        <div className="relative z-10">
+          <AppContent />
+        </div>
       </div>
     </Router>
   );

@@ -11,25 +11,25 @@ const TechStackPreview = () => {
       icon: <Globe className="w-6 h-6" />,
       title: "Frontend",
       techs: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-      color: "from-blue-400 to-cyan-500"
+      color: "bg-white text-black"
     },
     {
       icon: <Database className="w-6 h-6" />,
       title: "Backend",
       techs: ["Node.js", "Express", "MongoDB", "PostgreSQL"],
-      color: "from-green-400 to-emerald-500"
+      color: "bg-white text-black"
     },
     {
       icon: <Code className="w-6 h-6" />,
       title: "Tools",
       techs: ["Git", "Docker", "VS Code", "Figma"],
-      color: "from-purple-400 to-pink-500"
+      color: "bg-white text-black"
     },
     {
       icon: <Code className="w-6 h-6" />,
       title: "Languages",
       techs: ["Python", "Java", "C", "C++", "JavaScript", "PHP"],
-      color: "from-orange-400 to-red-500"
+      color: "bg-white text-black"
     }
   ];
 
@@ -44,10 +44,10 @@ const TechStackPreview = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             Tech Stack
           </h2>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
             Technologies and tools I work with
           </p>
         </motion.div>
@@ -61,13 +61,13 @@ const TechStackPreview = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:border-gray-600/50 transition-all duration-300 group"
+              className="bg-neutral-900/50 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300 group"
             >
               <div className="flex items-center mb-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-r ${category.color} text-white mr-3`}>
+                <div className={`p-3 rounded-xl ${category.color} mr-3`}>
                   {category.icon}
                 </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">
+                <h3 className="text-lg font-bold text-white group-hover:text-gray-300 transition-colors">
                   {category.title}
                 </h3>
               </div>
@@ -76,20 +76,20 @@ const TechStackPreview = () => {
                 {category.techs.slice(0, 3).map((tech, techIndex) => (
                   <div
                     key={techIndex}
-                    className="flex items-center gap-2 p-2 bg-gray-800/30 rounded-lg border border-gray-700/30"
+                    className="flex items-center gap-2 p-2 bg-white/5 rounded-lg border border-white/10"
                   >
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                    <span className="text-gray-300 text-sm">{tech}</span>
+                    <div className="w-2 h-2 bg-white/50 rounded-full"></div>
+                    <span className="text-gray-400 text-sm">{tech}</span>
                   </div>
                 ))}
                 {category.techs.length > 3 && (
                   <div className="text-center">
-                    <span className="text-gray-500 text-xs">+{category.techs.length - 3} more</span>
+                    <span className="text-gray-600 text-xs">+{category.techs.length - 3} more</span>
                   </div>
                 )}
               </div>
 
-              <div className={`absolute -top-1 -right-1 w-12 h-12 bg-gradient-to-br ${category.color} opacity-20 rounded-full blur-lg group-hover:opacity-30 transition-opacity duration-500`} />
+              <div className="absolute -top-1 -right-1 w-12 h-12 bg-white/5 rounded-full blur-lg group-hover:bg-white/10 transition-opacity duration-500" />
             </motion.div>
           ))}
         </div>
@@ -98,7 +98,7 @@ const TechStackPreview = () => {
         <div className="flex justify-center">
           <motion.button
             onClick={() => navigate('/tech-stack')}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium rounded-xl hover:shadow-xl transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-medium rounded-xl hover:bg-gray-200 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

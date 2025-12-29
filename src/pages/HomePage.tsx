@@ -20,16 +20,16 @@ const HomePage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen relative bg-gray-950"
+      className="min-h-screen relative bg-black"
     >
-      {/* Page Background with Squares */}
+      {/* Page Background with Squares - Black & White Theme */}
       <div className="fixed inset-0 -z-10">
         <Squares 
           speed={0.3}
           squareSize={50}
           direction="diagonal"
-          borderColor="rgba(0, 232, 255, 0.1)"
-          hoverFillColor="rgba(0, 232, 255, 0.05)"
+          borderColor="rgba(255, 255, 255, 0.05)"
+          hoverFillColor="rgba(255, 255, 255, 0.03)"
         />
       </div>
 
@@ -48,10 +48,10 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="mb-8"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white text-center">
               Interactive Terminal
             </h2>
-            <p className="text-gray-400 text-center mt-2">
+            <p className="text-gray-500 text-center mt-2">
               Explore my portfolio, projects, and experience through an interactive terminal interface
             </p>
           </motion.div>
@@ -63,7 +63,7 @@ const HomePage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
-              className="w-full max-w-4xl rounded-lg overflow-hidden shadow-2xl shadow-cyan-500/10"
+              className="w-full max-w-4xl rounded-lg overflow-hidden shadow-2xl border border-white/10"
             >
               <Terminal />
             </motion.div>
@@ -112,7 +112,7 @@ const HomePage = () => {
       <div className="fixed bottom-8 right-8 z-50">
         <button
           onClick={() => setShowModal(!showModal)}
-          className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3 rounded-lg flex items-center gap-2 shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105"
+          className="bg-white text-black px-4 py-3 rounded-lg flex items-center gap-2 shadow-lg hover:bg-gray-200 transition-all transform hover:scale-105"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,7 @@ const HomePage = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setShowModal(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 flex items-center justify-center p-4"
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
@@ -150,11 +150,11 @@ const HomePage = () => {
             className="w-full max-w-5xl max-h-[85vh] flex flex-col"
           >
             {/* Modal Header */}
-            <div className="bg-gray-900 px-6 py-4 rounded-t-lg border border-b-0 border-blue-500 flex items-center justify-between">
+            <div className="bg-neutral-900 px-6 py-4 rounded-t-lg border border-b-0 border-white/20 flex items-center justify-between">
               <div className="flex gap-2 items-center">
-                <span className="w-3 h-3 rounded-full bg-red-500"></span>
-                <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
-                <span className="w-3 h-3 rounded-full bg-green-500"></span>
+                <span className="w-3 h-3 rounded-full bg-white/30"></span>
+                <span className="w-3 h-3 rounded-full bg-white/50"></span>
+                <span className="w-3 h-3 rounded-full bg-white/70"></span>
               </div>
               <h3 className="text-gray-400 font-semibold">Interactive Terminal - Full View</h3>
               <button
@@ -179,7 +179,7 @@ const HomePage = () => {
             </div>
 
             {/* Modal Terminal Container */}
-            <div className="bg-gray-950 border border-t-0 border-blue-500 rounded-b-lg overflow-hidden flex-1">
+            <div className="bg-black border border-t-0 border-white/20 rounded-b-lg overflow-hidden flex-1">
               <Terminal />
             </div>
           </motion.div>

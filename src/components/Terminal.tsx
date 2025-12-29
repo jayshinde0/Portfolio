@@ -69,7 +69,7 @@ const Terminal: React.FC<{ className?: string }> = ({ className }) => {
       <div className="text-white">
         <p>💼 <strong>Professional Experience:</strong></p>
         <ul className="ml-4 mt-2 space-y-3">
-          <li><strong>Full Stack Developer Intern</strong> @ Ayunext Solutions (Sept 2025 – Nov 2025) Remote
+          <li><strong>Full Stack Developer Intern</strong> @ Ayunext Solutions (Sept 2025 – Feb 2026) Remote
             <ul className="ml-4 mt-1 space-y-1">
               <li>• Built SEO-friendly, responsive UIs with Next.js and React.js</li>
               <li>• Improved page load times by over 30% using SSR & SSG</li>
@@ -281,7 +281,7 @@ const Terminal: React.FC<{ className?: string }> = ({ className }) => {
             <div className="border border-cyan-400/50 rounded p-4 mt-4 text-sm space-y-3 max-h-96 overflow-y-auto bg-gray-900/30">
               <p className="text-cyan-400"><strong>WORK EXPERIENCE</strong></p>
               <div>
-                <p><strong>Full Stack Developer Intern</strong> @ Ayunext Solutions (Sept 2025 – Nov 2025)</p>
+                <p><strong>Full Stack Developer Intern</strong> @ Ayunext Solutions (Sept 2025 – Feb 2026)</p>
                 <ul className="ml-4 mt-1 space-y-1 text-gray-300">
                   <li>• Built SEO-friendly responsive UIs with Next.js and React.js</li>
                   <li>• Improved page load times by over 30% using SSR and Static Site Generation</li>
