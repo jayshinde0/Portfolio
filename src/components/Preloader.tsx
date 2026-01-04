@@ -9,7 +9,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
   const [phase, setPhase] = useState<'together' | 'split' | 'photos' | 'expand' | 'done'>('together');
 
   useEffect(() => {
-    // Phase 1: Names together for 0.8s
+    
     const timer1 = setTimeout(() => setPhase('split'), 800);
     
     // Phase 2: Split and show box with photos for 2s
