@@ -94,18 +94,22 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
             >
               {/* Photo slideshow inside box */}
               {(phase === 'split' || phase === 'photos') && (
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentPhoto}
-                    src={photos[currentPhoto]}
-                    alt="Jay"
-                    className="w-full h-full object-cover"
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                  />
-                </AnimatePresence>
+                <div className="relative w-full h-full">
+                  {photos.map((photo, index) => (
+                    <motion.img
+                      key={photo}
+                      src={photo}
+                      alt="Jay"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      initial={{ opacity: 0 }}
+                      animate={{ 
+                        opacity: currentPhoto === index ? 1 : 0,
+                        scale: currentPhoto === index ? 1 : 1.05
+                      }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    />
+                  ))}
+                </div>
               )}
             </motion.div>
 
