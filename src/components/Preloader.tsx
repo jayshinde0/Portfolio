@@ -7,9 +7,31 @@ interface PreloaderProps {
 
 const Preloader = ({ onComplete }: PreloaderProps) => {
   const [phase, setPhase] = useState<'together' | 'split' | 'photos' | 'expand' | 'done'>('together');
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  // Photos to cycle through in the box
+  const photos = ['/club1.jpeg', '/JAY_2.jpg', '/Hacktopia2.jpg', '/JAY_3.jpg'];
+  const [currentPhoto, setCurrentPhoto] = useState(0);
+
+  // Preload images for smooth transitions
+  useEffect(() => {
+    const imagePromises = photos.map((src) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+    });
+
+    Promise.all(imagePromises)
+      .then(() => setImagesLoaded(true))
+      .catch(() => setImagesLoaded(true)); // Continue even if some images fail
+  }, []);
 
   useEffect(() => {
-    
+    if (!imagesLoaded) return;
+
     const timer1 = setTimeout(() => setPhase('split'), 800);
     
     // Phase 2: Split and show box with photos for 2s
@@ -30,11 +52,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
       clearTimeout(timer4);
       clearTimeout(timer5);
     };
-  }, [onComplete]);
-
-  // Photos to cycle through in the box
-  const photos = ['/club1.jpeg', '/JAY_2.jpg', '/Hacktopia2.jpg', '/JAY_3.jpg'];
-  const [currentPhoto, setCurrentPhoto] = useState(0);
+  }, [onComplete, imagesLoaded]);
 
   useEffect(() => {
     if (phase === 'photos' || phase === 'split') {
@@ -49,7 +67,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
     <AnimatePresence>
       {phase !== 'done' ? (
         <motion.div
-          className="fixed inset-0 z-[100] bg-white flex items-center justify-center overflow-hidden"
+          className="fixed inset-0 z-[100] bg-white flex items-center justify-center overflow-hidden px-4"
           animate={{
             backgroundColor: phase === 'expand' ? '#000000' : '#ffffff',
           }}
@@ -57,14 +75,14 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
           {/* Content container */}
-          <div className="relative flex items-center justify-center">
+          <div className="relative flex items-center justify-center w-full max-w-screen-xl">
             {/* JAY */}
             <motion.span
-              className="text-5xl md:text-7xl lg:text-8xl font-bold text-black italic tracking-tight select-none"
+              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap"
               style={{ fontFamily: 'Georgia, serif' }}
               initial={{ x: 0, opacity: 1 }}
               animate={{
-                x: phase === 'together' ? 0 : phase === 'expand' ? '-50vw' : -130,
+                x: phase === 'together' ? 0 : phase === 'expand' ? '-50vw' : window.innerWidth < 640 ? -60 : window.innerWidth < 768 ? -80 : -130,
                 opacity: phase === 'expand' ? 0 : 1,
               }}
               transition={{ 
@@ -77,14 +95,14 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
 
             {/* Black Box with Photos */}
             <motion.div
-              className="bg-black rounded-2xl overflow-hidden flex items-center justify-center"
+              className="bg-black rounded-xl md:rounded-2xl overflow-hidden flex items-center justify-center"
               initial={{ width: 0, height: 0, opacity: 0, margin: 0 }}
               animate={{
-                width: phase === 'together' ? 0 : phase === 'expand' ? '100vw' : 240,
-                height: phase === 'together' ? 0 : phase === 'expand' ? '100vh' : 180,
+                width: phase === 'together' ? 0 : phase === 'expand' ? '100vw' : window.innerWidth < 640 ? 140 : window.innerWidth < 768 ? 180 : 240,
+                height: phase === 'together' ? 0 : phase === 'expand' ? '100vh' : window.innerWidth < 640 ? 100 : window.innerWidth < 768 ? 130 : 180,
                 opacity: phase === 'together' ? 0 : 1,
-                margin: phase === 'together' ? 0 : phase === 'expand' ? 0 : '0 24px',
-                borderRadius: phase === 'expand' ? 0 : 16,
+                margin: phase === 'together' ? 0 : phase === 'expand' ? 0 : window.innerWidth < 640 ? '0 12px' : '0 24px',
+                borderRadius: phase === 'expand' ? 0 : window.innerWidth < 640 ? 12 : 16,
               }}
               transition={{ 
                 duration: phase === 'expand' ? 0.6 : 0.5, 
@@ -93,14 +111,16 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
               }}
             >
               {/* Photo slideshow inside box */}
-              {(phase === 'split' || phase === 'photos') && (
+              {(phase === 'split' || phase === 'photos') && imagesLoaded && (
                 <div className="relative w-full h-full">
                   {photos.map((photo, index) => (
                     <motion.img
                       key={photo}
                       src={photo}
-                      alt="Jay"
+                      alt={`Jay ${index + 1}`}
                       className="absolute inset-0 w-full h-full object-cover"
+                      loading="eager"
+                      decoding="async"
                       initial={{ opacity: 0 }}
                       animate={{ 
                         opacity: currentPhoto === index ? 1 : 0,
@@ -115,11 +135,11 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
 
             {/* SHINDE */}
             <motion.span
-              className="text-5xl md:text-7xl lg:text-8xl font-bold text-black italic tracking-tight select-none"
+              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap"
               style={{ fontFamily: 'Georgia, serif' }}
               initial={{ x: 0, opacity: 1 }}
               animate={{
-                x: phase === 'together' ? 0 : phase === 'expand' ? '50vw' : 130,
+                x: phase === 'together' ? 0 : phase === 'expand' ? '50vw' : window.innerWidth < 640 ? 60 : window.innerWidth < 768 ? 80 : 130,
                 opacity: phase === 'expand' ? 0 : 1,
               }}
               transition={{ 

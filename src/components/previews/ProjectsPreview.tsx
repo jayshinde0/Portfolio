@@ -1,24 +1,27 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, ExternalLink, Github } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ExternalLink, Github, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  techStack: string[];
+  image: string;
+  category: string;
+  githubUrl: string;
+  liveUrl: string;
+  status: string;
+}
 
 const ProjectsPreview = () => {
   const navigate = useNavigate();
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const featuredProjects = [
+  const featuredProjects: Project[] = [
     {
       id: 1,
-      title: 'PharmaRise',
-      description: 'Professional pharma website showcasing products with BMI calculator. Client project with full frontend development and EmailJS integration.',
-      techStack: ['React', 'Tailwind CSS', 'EmailJS', 'BMI Calculator'],
-      image: '/Pharmarise.png',
-      category: 'Client Project',
-      githubUrl: 'https://github.com/jayshinde0/PharmaRise',
-      liveUrl: 'https://www.pharmarise.in/',
-      status: 'Live'
-    },
-    {
-      id: 2,
       title: 'Habit Tracker',
       description: 'Full-stack MERN habit tracking app with JWT auth, interactive calendar, streak tracking, and real-time progress updates.',
       techStack: ['React', 'Node.js', 'MongoDB', 'Express', 'TypeScript'],
@@ -29,7 +32,7 @@ const ProjectsPreview = () => {
       status: 'Live'
     },
     {
-      id: 3,
+      id: 2,
       title: 'Blooms Taxonomy Question Paper Generator',
       description: 'AI-powered question paper generation system using Bloom\'s Taxonomy and machine learning',
       techStack: ['Django', 'Python', 'Scikit-learn', 'Pandas'],
@@ -40,7 +43,7 @@ const ProjectsPreview = () => {
       status: 'Completed'
     },
     {
-      id: 4,
+      id: 3,
       title: 'BudgeStitch',
       description: 'Platform connecting local tailors with customers for affordable custom clothing',
       techStack: ['Django', 'Python', 'HTML', 'CSS'],
@@ -48,6 +51,17 @@ const ProjectsPreview = () => {
       category: 'E-Commerce',
       githubUrl: 'https://github.com/jayshinde0/BudgeStitch',
       liveUrl: 'https://budgestitch.netlify.app',
+      status: 'Live'
+    },
+    {
+      id: 4,
+      title: 'Debuggers Club',
+      description: 'Official platform for Debugger\'s Club with event registration, payment uploads, and Google Sheets integration for seamless data management.',
+      techStack: ['Next.js', 'MongoDB', 'Cloudinary', 'TypeScript'],
+      image: '/Debuggers.png',
+      category: 'Full Stack',
+      githubUrl: '',
+      liveUrl: 'https://debuggers-club.vercel.app/',
       status: 'Live'
     },
     {
@@ -102,7 +116,8 @@ const ProjectsPreview = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group relative"
+              className="group relative cursor-pointer"
+              onClick={() => setSelectedProject(project)}
             >
               <div className="absolute inset-0 bg-white/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
@@ -162,33 +177,9 @@ const ProjectsPreview = () => {
                     )}
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-2">
-                    <motion.a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 py-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-white/10 transition-colors flex items-center justify-center gap-2 text-sm text-gray-300"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Github className="w-4 h-4" />
-                      <span>Code</span>
-                    </motion.a>
-
-                    {project.liveUrl && (
-                      <motion.a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 py-2 bg-white text-black rounded-lg flex items-center justify-center gap-2 text-sm font-medium hover:bg-gray-200 transition-colors"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        <span>Demo</span>
-                      </motion.a>
-                    )}
+                  {/* View Details Hint */}
+                  <div className="text-xs text-gray-600 group-hover:text-gray-400 transition-colors text-center">
+                    Click to view details
                   </div>
                 </div>
               </div>
@@ -209,6 +200,109 @@ const ProjectsPreview = () => {
           </motion.button>
         </div>
       </div>
+
+      {/* Project Detail Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative bg-neutral-900 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden border border-white/20"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-6 right-6 z-10 p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Scrollable Content */}
+              <div className="overflow-y-auto max-h-[90vh]">
+                {/* Project Image */}
+                <div className="relative h-80 overflow-hidden">
+                  <img
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/50 to-transparent" />
+                </div>
+
+                {/* Content */}
+                <div className="p-8 -mt-32 relative z-10">
+                  {/* Title */}
+                  <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                    {selectedProject.title}
+                  </h2>
+
+                  {/* Description */}
+                  <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                    {selectedProject.description}
+                  </p>
+
+                  {/* Tech Stack */}
+                  <div className="mb-8">
+                    <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
+                      Technologies
+                    </h3>
+                    <div className="flex flex-wrap gap-3">
+                      {selectedProject.techStack.map((tech, index) => (
+                        <span
+                          key={index}
+                          className="px-4 py-2 bg-neutral-800/80 backdrop-blur-sm rounded-lg text-gray-300 text-sm font-medium border border-white/10"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    {selectedProject.liveUrl && (
+                      <motion.a
+                        href={selectedProject.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 py-4 bg-white text-black rounded-xl font-medium text-center flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <ExternalLink className="w-5 h-5" />
+                        <span>Live Demo</span>
+                      </motion.a>
+                    )}
+                    {selectedProject.githubUrl && (
+                      <motion.a
+                        href={selectedProject.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${selectedProject.liveUrl ? 'flex-1' : 'w-full'} py-4 border border-white/20 text-white rounded-xl font-medium text-center flex items-center justify-center gap-2 hover:bg-white/10 transition-colors`}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <Github className="w-5 h-5" />
+                        <span>Source Code</span>
+                      </motion.a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Code, GraduationCap, Briefcase } from 'lucide-react';
 
 const About = () => {
+  const [activeTab, setActiveTab] = useState<'experience' | 'education'>('experience');
+
   const skills = [
     { name: 'React.js', level: 88 },
     { name: 'Next.js', level: 85 },
@@ -11,6 +14,50 @@ const About = () => {
     { name: 'Express.js', level: 74 },
     { name: 'MongoDB', level: 78 },
     { name: 'Docker', level: 60 },
+  ];
+
+  const experiences = [
+    {
+      period: 'Sept 2025 - Feb 2026',
+      company: 'Ayunext Solutions',
+      role: 'Full Stack Developer',
+      description: [
+        'Developed and optimized full-stack applications using React.js and Node.js',
+        'Implemented frontend UI based on modern designs and reduced backend API latency',
+        'Built efficient data handling solutions with MongoDB and Express.js'
+      ]
+    },
+    {
+      period: 'June 2024 - Aug 2024',
+      company: 'Golden Dreams Software',
+      role: 'Frontend Developer',
+      description: [
+        'Created responsive web interfaces using React and Tailwind CSS',
+        'Collaborated with design team to implement pixel-perfect UI components',
+        'Optimized web performance and improved user experience'
+      ]
+    }
+  ];
+
+  const education = [
+    {
+      period: '2024 - 2027',
+      institution: 'K.K. Wagh Institute of Engineering',
+      degree: 'B.Tech in Computer Science',
+      achievement: 'CGPA: 9.0'
+    },
+    {
+      period: '2021 - 2024',
+      institution: 'K.K. Wagh Polytechnic',
+      degree: 'Diploma in Computer Technology',
+      achievement: 'Achieved: 93.41%'
+    },
+    {
+      period: '2019 - 2021',
+      institution: 'Maratha High School',
+      degree: 'Secondary Education',
+      achievement: 'Completed'
+    }
   ];
 
   return (
@@ -61,33 +108,94 @@ const About = () => {
                   in web development. Passionate about creating innovative digital solutions.
                 </p>
 
-                {/* Education & Experience */}
+                {/* Education & Experience Tabs */}
                 <div className="space-y-4">
-                  <div className="flex items-start gap-4 p-4 border border-white/20 rounded-xl bg-white/5">
-                    <GraduationCap className="w-5 h-5 text-white mt-1" />
-                    <div>
-                      <h4 className="font-medium text-white">Education</h4>
-                      <p className="text-sm text-gray-300">B.Tech Computer Science</p>
-                      <p className="text-xs text-gray-400">KKWIEER</p>
-                    </div>
+                  <h3 className="text-xl font-bold text-white mb-4">Education & Experience</h3>
+                  
+                  {/* Tab Buttons */}
+                  <div className="flex gap-2 mb-6">
+                    <button
+                      onClick={() => setActiveTab('experience')}
+                      className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+                        activeTab === 'experience'
+                          ? 'bg-white text-black'
+                          : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                      }`}
+                    >
+                      <Briefcase className="w-4 h-4" />
+                      Experience
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('education')}
+                      className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+                        activeTab === 'education'
+                          ? 'bg-white text-black'
+                          : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                      }`}
+                    >
+                      <GraduationCap className="w-4 h-4" />
+                      Education
+                    </button>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 border border-white/20 rounded-xl bg-white/5">
-                    <Briefcase className="w-5 h-5 text-white mt-1" />
-                    <div>
-                      <h4 className="font-medium text-white">Full Stack Developer</h4>
-                      <p className="text-sm text-gray-300">Ayunext Solutions</p>
-                      <p className="text-xs text-gray-400">Sept 2025 - Feb 2026</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4 p-4 border border-white/20 rounded-xl bg-white/5">
-                    <Briefcase className="w-5 h-5 text-white mt-1" />
-                    <div>
-                      <h4 className="font-medium text-white">Frontend Developer</h4>
-                      <p className="text-sm text-gray-300">Golden Dreams Software</p>
-                      <p className="text-xs text-gray-400">June 2024 - Aug 2024</p>
-                    </div>
+                  {/* Tab Content */}
+                  <div className="space-y-4">
+                    {activeTab === 'experience' ? (
+                      <>
+                        {experiences.map((exp, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="p-4 border border-white/10 rounded-xl bg-white/5"
+                          >
+                            <div className="flex items-start gap-3 mb-3">
+                              <div className="p-2 bg-white/10 rounded-lg">
+                                <Briefcase className="w-4 h-4 text-white" />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-xs text-gray-400 mb-1">{exp.period}</p>
+                                <h4 className="font-bold text-white text-lg">{exp.company}</h4>
+                                <p className="text-sm text-gray-300">{exp.role}</p>
+                              </div>
+                            </div>
+                            <ul className="space-y-2 ml-11">
+                              {exp.description.map((item, i) => (
+                                <li key={i} className="text-sm text-gray-400 flex items-start gap-2">
+                                  <span className="text-white mt-1">•</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </motion.div>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {education.map((edu, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="p-4 border border-white/10 rounded-xl bg-white/5"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="p-2 bg-white/10 rounded-lg">
+                                <GraduationCap className="w-4 h-4 text-white" />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-xs text-gray-400 mb-1">{edu.period}</p>
+                                <h4 className="font-bold text-white">{edu.degree}</h4>
+                                <p className="text-sm text-gray-300 mb-2">{edu.institution}</p>
+                                <p className="text-sm text-gray-400">{edu.achievement}</p>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

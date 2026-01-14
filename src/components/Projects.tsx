@@ -23,19 +23,6 @@ const Projects = () => {
   const projects: Project[] = [
     {
       id: 1,
-      title: 'PharmaRise',
-      shortDescription: 'Professional pharma website with product showcase',
-      fullDescription: 'Client project - Professional pharmaceutical website showcasing products with integrated BMI calculator. Built complete frontend with EmailJS service for contact functionality. Clean, responsive design optimized for healthcare industry.',
-      techStack: ['React', 'Tailwind CSS', 'EmailJS', 'JavaScript'],
-      image: '/Pharmarise.png',
-      category: 'Client Project',
-      githubUrl: 'https://github.com/jayshinde0/PharmaRise',
-      liveUrl: 'https://www.pharmarise.in/',
-      features: ['Product Showcase', 'BMI Calculator', 'EmailJS Contact Form'],
-      year: '2025'
-    },
-    {
-      id: 2,
       title: 'Habit Tracker',
       shortDescription: 'Full-stack MERN habit tracking application',
       fullDescription: 'A comprehensive habit tracking application built with the MERN stack. Features JWT authentication, interactive monthly calendar view, streak tracking, and real-time progress updates. Clean minimal interface with Tailwind CSS.',
@@ -48,7 +35,7 @@ const Projects = () => {
       year: '2025'
     },
     {
-      id: 3,
+      id: 2,
       title: 'Blooms Taxonomy QPG',
       shortDescription: 'AI-powered question paper generation using ML',
       fullDescription: 'Automates question paper creation using Bloom\'s Taxonomy and ML techniques with automatic mark prediction.',
@@ -61,7 +48,7 @@ const Projects = () => {
       year: '2024'
     },
     {
-      id: 4,
+      id: 3,
       title: 'BudgeStitch',
       shortDescription: 'Connect local tailors with customers',
       fullDescription: 'Platform connecting local tailors with customers for affordable custom clothing.',
@@ -74,7 +61,7 @@ const Projects = () => {
       year: '2024'
     },
     {
-      id: 5,
+      id: 4,
       title: 'Secure Transfer',
       shortDescription: 'Real-time file transfer on local network',
       fullDescription: 'Secure file transfer system for real-time transfers between devices without cloud storage.',
@@ -87,7 +74,7 @@ const Projects = () => {
       year: '2024'
     },
     {
-      id: 6,
+      id: 5,
       title: 'LeetMetric',
       shortDescription: 'Track LeetCode performance visually',
       fullDescription: 'Web tool that tracks and visualizes LeetCode performance with beautiful charts.',
@@ -100,7 +87,7 @@ const Projects = () => {
       year: '2024'
     },
     {
-      id: 7,
+      id: 6,
       title: 'InterviewAce',
       shortDescription: 'AI-powered interview preparation',
       fullDescription: 'Intelligent interview preparation platform with AI-powered practice and personalized learning.',
@@ -113,7 +100,7 @@ const Projects = () => {
       year: '2025'
     },
     {
-      id: 8,
+      id: 7,
       title: 'Debuggers Club',
       shortDescription: 'Official club website with event management',
       fullDescription: 'Official platform for Debugger\'s Club with event registration and data management.',
@@ -124,6 +111,19 @@ const Projects = () => {
       liveUrl: 'https://debuggers-club.vercel.app/',
       features: ['Event registration', 'Payment uploads', 'Google Sheets export'],
       year: '2025'
+    },
+    {
+      id: 8,
+      title: 'Zennit UI',
+      shortDescription: 'Modern component library for React',
+      fullDescription: 'A comprehensive UI component library built with React and Tailwind CSS. Features customizable components, dark mode support, and accessibility-first design.',
+      techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+      image: '/zennit_ui.png',
+      category: 'Frontend',
+      githubUrl: 'https://github.com/jayshinde0/zennit-ui',
+      liveUrl: 'https://zennit-ui.vercel.app/',
+      features: ['50+ Components', 'Dark Mode', 'Fully Accessible'],
+      year: '2024'
     }
   ];
 
