@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ExternalLink, Github, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import './ProjectModal.css';
 
 interface Project {
   id: number;
@@ -13,78 +14,161 @@ interface Project {
   githubUrl: string;
   liveUrl: string;
   status: string;
+  features?: string[];
+  detailedDescription?: string;
 }
 
 const ProjectsPreview = () => {
   const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.classList.add('modal-open');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+    };
+  }, [selectedProject]);
+
   const featuredProjects: Project[] = [
     {
       id: 1,
+      title: 'StudyAssist AI',
+      description: 'Intelligent study assistant that transforms learning materials into interactive AI-powered quizzes with adaptive learning and topic mastery tracking.',
+      detailedDescription: 'An intelligent study assistant that transforms static learning materials into interactive, personalized learning experiences. Upload content in multiple formats (PDFs, DOCX, TXT, YouTube videos) and the system automatically generates AI-powered quizzes while tracking topic-level performance. The adaptive learning engine analyzes your performance and adjusts future quizzes to focus on weaker areas, improving learning efficiency and retention. Uses local Mistral LLM via Ollama for privacy, reduced latency, and cost-efficient AI processing without relying on cloud APIs.',
+      techStack: ['React', 'Node.js', 'MongoDB', 'Ollama', 'Mistral LLM', 'Express', 'Tailwind CSS'],
+      image: '/Study_Assistant_2.png',
+      category: 'AI/ML',
+      githubUrl: 'https://github.com/jayshinde0/Study-Assistant-',
+      liveUrl: '',
+      status: 'In progress',
+      features: [
+        'AI Quiz Generation - Context-aware questions from uploaded content',
+        'Adaptive Learning Engine - Adjusts difficulty based on performance',
+        'Topic Mastery Tracking - Weak/Medium/Strong categorization',
+        'Multi-format Upload - PDF, DOCX, TXT, YouTube transcripts',
+        'Local LLM Processing - Privacy-focused with Mistral via Ollama',
+        'Analytics Dashboard - Learning progress trends and insights',
+        'Personalized Revision - Smart scheduling based on weak topics',
+        'Performance Analytics - Topic-wise accuracy and improvement tracking'
+      ]
+    },
+    {
+      id: 2,
       title: 'Habit Tracker',
       description: 'Full-stack MERN habit tracking app with JWT auth, interactive calendar, streak tracking, and real-time progress updates.',
-      techStack: ['React', 'Node.js', 'MongoDB', 'Express', 'TypeScript'],
+      detailedDescription: 'A comprehensive habit tracking application built with the MERN stack. Features JWT authentication for secure user sessions, an interactive monthly calendar view for visualizing habit completion, streak tracking to maintain motivation, and real-time progress updates. The clean minimal interface built with Tailwind CSS provides an intuitive user experience for managing daily habits and building consistent routines.',
+      techStack: ['React', 'Node.js', 'MongoDB', 'Express', 'TypeScript', 'Tailwind CSS'],
       image: '/Habit tracker.png',
       category: 'Full Stack',
       githubUrl: 'https://github.com/jayshinde0/Habit-Tracker',
       liveUrl: 'https://habit-tracker-iota-gray.vercel.app/',
-      status: 'Live'
+      status: 'Live',
+      features: [
+        'JWT Authentication - Secure user login and session management',
+        'Streak Tracking - Monitor consecutive days of habit completion',
+        'Monthly Calendar View - Visual representation of habit progress',
+        'Real-time Updates - Instant feedback on habit completion',
+        'Responsive Design - Works seamlessly on all devices',
+        'Progress Analytics - Track improvement over time',
+        'Multiple Habits - Manage unlimited habits simultaneously',
+        'Clean UI - Minimal and intuitive interface'
+      ]
     },
     {
-      id: 2,
+      id: 3,
       title: 'Blooms Taxonomy Question Paper Generator',
       description: 'AI-powered question paper generation system using Bloom\'s Taxonomy and machine learning',
-      techStack: ['Django', 'Python', 'Scikit-learn', 'Pandas'],
+      detailedDescription: 'An intelligent question paper generation system that automates the creation of educational assessments using Bloom\'s Taxonomy principles. The system uses machine learning techniques to analyze question difficulty levels and automatically predict appropriate marks. Built with Django and Python, it helps educators create balanced question papers that test different cognitive levels from remembering to creating.',
+      techStack: ['Django', 'Python', 'Scikit-learn', 'Pandas', 'NumPy'],
       image: '/blooms.jpg',
       category: 'AI/ML',
       githubUrl: 'https://github.com/jayshinde0/Blooms-Taxonomy-Based-Question-Paper-Generation',
       liveUrl: 'https://blooms-taxonomy-generator.netlify.app',
-      status: 'Completed'
+      status: 'Completed',
+      features: [
+        'Bloom\'s Taxonomy Integration - Questions across all cognitive levels',
+        'ML-based Mark Prediction - Automatic difficulty assessment',
+        'Customizable Parameters - Adjust question distribution',
+        'Question Bank Management - Store and categorize questions',
+        'PDF Export - Generate printable question papers',
+        'Difficulty Analysis - Balance easy, medium, and hard questions',
+        'Topic Coverage - Ensure comprehensive syllabus coverage',
+        'Automated Generation - Save time in paper creation'
+      ]
     },
     {
-      id: 3,
+      id: 4,
       title: 'BudgeStitch',
       description: 'Platform connecting local tailors with customers for affordable custom clothing',
-      techStack: ['Django', 'Python', 'HTML', 'CSS'],
+      detailedDescription: 'A comprehensive e-commerce platform that bridges the gap between local tailors and customers seeking affordable custom clothing. Users can browse tailor portfolios, select fabrics, provide measurements, and place orders for custom-tailored garments. The platform empowers local artisans while providing customers with personalized clothing options at competitive prices.',
+      techStack: ['Django', 'Python', 'SQLite', 'HTML', 'CSS', 'JavaScript'],
       image: '/Budge.png',
       category: 'E-Commerce',
       githubUrl: 'https://github.com/jayshinde0/BudgeStitch',
       liveUrl: 'https://budgestitch.netlify.app',
-      status: 'Live'
+      status: 'Live',
+      features: [
+        'Fabric Selection - Browse and choose from various fabric options',
+        'Custom Tailoring - Provide measurements for perfect fit',
+        'Tailor Portfolios - View work samples and ratings',
+        'Order Management - Track orders from placement to delivery',
+        'Price Comparison - Compare quotes from multiple tailors',
+        'Review System - Rate and review tailor services',
+        'Measurement Guide - Help users take accurate measurements',
+        'Secure Payments - Safe transaction processing'
+      ]
     },
     {
-      id: 4,
+      id: 5,
       title: 'Debuggers Club',
-      description: 'Official platform for Debugger\'s Club with event registration, payment uploads, and Google Sheets integration for seamless data management.',
-      techStack: ['Next.js', 'MongoDB', 'Cloudinary', 'TypeScript'],
+      description: 'Official platform for Debugger\'s Club with event registration, payment uploads, and Google Sheets integration.',
+      detailedDescription: 'The official website for Debugger\'s Club featuring comprehensive event management capabilities. Students can register for technical events, upload payment confirmations, and receive instant updates. The platform integrates with Google Sheets for seamless data management and uses Cloudinary for efficient image storage. Built with Next.js for optimal performance and SEO.',
+      techStack: ['Next.js', 'MongoDB', 'Cloudinary', 'TypeScript', 'Google Sheets API'],
       image: '/Debuggers.png',
       category: 'Full Stack',
       githubUrl: '',
       liveUrl: 'https://debuggers-club.vercel.app/',
-      status: 'Live'
-    },
-    {
-      id: 5,
-      title: 'Secure Transfer',
-      description: 'Real-time file transfer system for devices on the same network',
-      techStack: ['React', 'Spring Boot', 'HTML5', 'CSS3'],
-      image: 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800',
-      category: 'Full Stack',
-      githubUrl: 'https://github.com/jayshinde0/File-flow',
-      liveUrl: 'https://secure-transfer-app.netlify.app',
-      status: 'In progress'
+      status: 'Live',
+      features: [
+        'Event Registration - Easy signup for club events',
+        'Payment Upload - Submit payment confirmations',
+        'Google Sheets Export - Automatic data synchronization',
+        'Image Management - Cloudinary integration for media',
+        'Real-time Updates - Instant event notifications',
+        'Member Dashboard - Track registrations and participation',
+        'Responsive Design - Mobile-friendly interface',
+        'SEO Optimized - Better discoverability with Next.js'
+      ]
     },
     {
       id: 6,
       title: 'LeetMetric',
       description: 'Web tool for tracking and visualizing LeetCode performance',
-      techStack: ['HTML', 'CSS', 'JavaScript', 'Chart.js'],
+      detailedDescription: 'A performance tracking tool designed for competitive programmers to visualize their LeetCode progress. The application fetches user statistics and presents them through interactive charts and graphs, helping users identify strengths and areas for improvement. Built with vanilla JavaScript and Chart.js for lightweight, fast performance.',
+      techStack: ['HTML', 'CSS', 'JavaScript', 'Chart.js', 'LeetCode API'],
       image: 'https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=800',
       category: 'Frontend',
       githubUrl: 'https://github.com/jayshinde0/LeetMetric',
       liveUrl: 'https://leetmetric.netlify.app',
-      status: 'Live'
+      status: 'Live',
+      features: [
+        'Performance Tracking - Monitor solving progress over time',
+        'Interactive Charts - Beautiful data visualizations',
+        'Real-time Data - Fetch latest LeetCode statistics',
+        'Problem Analysis - Breakdown by difficulty and topic',
+        'Streak Tracking - Monitor consistent practice',
+        'Comparison Tools - Compare with other users',
+        'Progress Insights - Identify improvement areas',
+        'Lightweight - Fast loading with vanilla JavaScript'
+      ]
     }
   ];
 
@@ -204,103 +288,113 @@ const ProjectsPreview = () => {
       {/* Project Detail Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <motion.div
-            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedProject(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative bg-neutral-900 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden border border-white/20"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 z-10 p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+          <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
+            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+              {/* Header */}
+              <div className="modal-header">
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 bg-white/10 rounded-full text-white text-xs font-medium">
+                    {selectedProject.category}
+                  </span>
+                  <span className="text-gray-400 text-sm">2025</span>
+                </div>
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
+              </div>
 
               {/* Scrollable Content */}
-              <div className="overflow-y-auto max-h-[90vh]">
-                {/* Project Image */}
-                <div className="relative h-80 overflow-hidden">
-                  <img
-                    src={selectedProject.image}
-                    alt={selectedProject.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/50 to-transparent" />
+              <div className="modal-content">
+                {/* Project Title */}
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                  {selectedProject.title}
+                </h2>
+
+                {/* Overview */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-semibold text-white mb-3 uppercase tracking-wide text-sm">
+                    Overview
+                  </h3>
+                  <p className="text-gray-300 text-base leading-relaxed">
+                    {selectedProject.detailedDescription || selectedProject.description}
+                  </p>
                 </div>
 
-                {/* Content */}
-                <div className="p-8 -mt-32 relative z-10">
-                  {/* Title */}
-                  <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                    {selectedProject.title}
-                  </h2>
-
-                  {/* Description */}
-                  <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                    {selectedProject.description}
-                  </p>
-
-                  {/* Tech Stack */}
+                {/* Key Features - Compact Grid */}
+                {selectedProject.features && selectedProject.features.length > 0 && (
                   <div className="mb-8">
-                    <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
-                      Technologies
+                    <h3 className="text-lg font-semibold text-white mb-4 uppercase tracking-wide text-sm">
+                      Key Features
                     </h3>
-                    <div className="flex flex-wrap gap-3">
-                      {selectedProject.techStack.map((tech, index) => (
-                        <span
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {selectedProject.features.map((feature, index) => (
+                        <div
                           key={index}
-                          className="px-4 py-2 bg-neutral-800/80 backdrop-blur-sm rounded-lg text-gray-300 text-sm font-medium border border-white/10"
+                          className="flex items-start gap-3 p-3 bg-neutral-800/30 rounded-lg border border-white/5 hover:border-white/10 transition-colors"
                         >
-                          {tech}
-                        </span>
+                          <div className="w-1 h-1 rounded-full bg-white mt-2 flex-shrink-0"></div>
+                          <span className="text-gray-300 text-sm leading-relaxed">{feature}</span>
+                        </div>
                       ))}
                     </div>
                   </div>
+                )}
 
-                  {/* Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    {selectedProject.liveUrl && (
-                      <motion.a
-                        href={selectedProject.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 py-4 bg-white text-black rounded-xl font-medium text-center flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                {/* Technologies */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-white mb-4 uppercase tracking-wide text-sm">
+                    Built With
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedProject.techStack.map((tech, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1.5 bg-neutral-800/60 rounded-md text-gray-200 text-sm font-medium border border-white/10"
                       >
-                        <ExternalLink className="w-5 h-5" />
-                        <span>Live Demo</span>
-                      </motion.a>
-                    )}
-                    {selectedProject.githubUrl && (
-                      <motion.a
-                        href={selectedProject.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`${selectedProject.liveUrl ? 'flex-1' : 'w-full'} py-4 border border-white/20 text-white rounded-xl font-medium text-center flex items-center justify-center gap-2 hover:bg-white/10 transition-colors`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <Github className="w-5 h-5" />
-                        <span>Source Code</span>
-                      </motion.a>
-                    )}
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+
+              {/* Footer */}
+              <div className="modal-footer">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {selectedProject.githubUrl && (
+                    <a
+                      href={selectedProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-3 bg-white text-black rounded-lg font-semibold text-center flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors"
+                    >
+                      <Github className="w-4 h-4" />
+                      <span>View Code</span>
+                    </a>
+                  )}
+                  {selectedProject.liveUrl ? (
+                    <a
+                      href={selectedProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-3 border-2 border-white/20 text-white rounded-lg font-semibold text-center flex items-center justify-center gap-2 hover:bg-white/5 transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>View Live</span>
+                    </a>
+                  ) : (
+                    <div className="flex-1 py-3 border-2 border-white/10 text-gray-500 rounded-lg font-semibold text-center flex items-center justify-center gap-2 cursor-not-allowed">
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Coming Soon</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </AnimatePresence>
     </section>

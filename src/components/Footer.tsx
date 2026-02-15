@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowUp, Instagram } from 'lucide-react';
 
 const Footer = () => {
   const socialLinks = [
     { icon: Github, href: 'https://github.com/jayshinde0', label: 'GitHub' },
     { icon: Linkedin, href: 'https://www.linkedin.com/in/jayshinde10/', label: 'LinkedIn' },
+    { icon: Instagram, href: 'https://www.instagram.com/jay_shinde__10?igsh=MWdvdzE4Znhud25mMQ==', label: 'Instagram' },
     { icon: Mail, href: 'mailto:jayshinde4554@gmail.com', label: 'Email' },
   ];
 
