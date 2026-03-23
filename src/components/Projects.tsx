@@ -58,6 +58,29 @@ const Projects = () => {
   const projects: Project[] = [
     {
       id: 1,
+      title: 'TicketFlow AI',
+      shortDescription: 'Intelligent HITL ticket management system with 10-agent AI pipeline for automated resolution',
+      fullDescription: 'An enterprise-grade ticket management system that combines machine learning, natural language processing, and large language models to automate IT support workflows. The system features a 10-agent AI pipeline including NLP preprocessing with spaCy, sentiment analysis using HuggingFace Transformers, category/priority classification with scikit-learn, and RAG-powered response generation using Mistral-Nemo LLM via Ollama. Built with FastAPI and React, it includes ChromaDB for semantic search, real-time WebSocket updates, LIME explainability for predictions, and continuous learning through human-in-the-loop feedback. The system automatically classifies tickets, predicts SLA deadlines, detects duplicates, generates AI responses, and routes decisions based on confidence scores (≥85% auto-resolve, 60-85% suggest to agent, <60% escalate). Models automatically retrain when accuracy drops below 80%.',
+      techStack: ['FastAPI', 'React', 'MongoDB', 'ChromaDB', 'Mistral-Nemo', 'Ollama', 'scikit-learn', 'HuggingFace', 'WebSocket'],
+      image: '/TicketFlow-AI 1.png',
+      images: ['/TicketFlow-AI 1.png', '/TicketFlow-AI 2.png', '/TicketFlow-AI 3.png', '/TicketFlow-AI 4.png', '/TicketFlow-AI 5.png', '/TicketFlow-AI 6.png'],
+      category: 'AI/ML',
+      githubUrl: 'https://github.com/jayshinde0/TicketFlow-AI',
+      liveUrl: '',
+      features: [
+        '10-Agent AI Pipeline - Specialized agents for classification, sentiment, RAG, and routing',
+        'RAG-Powered Responses - ChromaDB + Mistral-Nemo LLM for context-aware solutions',
+        'Human-in-the-Loop - Agent review with feedback for continuous improvement',
+        'Smart Classification - Auto-categorize into 10 categories with ML models',
+        'SLA Prediction - Intelligent deadline estimation and breach risk alerts',
+        'Duplicate Detection - Semantic search finds similar resolved tickets',
+        'Real-time Analytics - Live dashboards with WebSocket updates',
+        'Auto-Retraining - Models retrain when accuracy drops below threshold'
+      ],
+      year: '2026'
+    },
+    {
+      id: 2,
       title: 'StudyAssist AI',
       shortDescription: 'Adaptive study platform with AI-powered quiz generation',
       fullDescription: 'An intelligent study assistant that transforms static learning materials into interactive, personalized learning experiences. Upload content in multiple formats (PDFs, DOCX, TXT, YouTube videos) and the system automatically generates AI-powered quizzes while tracking topic-level performance. The adaptive learning engine analyzes your performance and adjusts future quizzes to focus on weaker areas, improving learning efficiency and retention. Uses local Mistral LLM via Ollama for privacy, reduced latency, and cost-efficient AI processing without relying on cloud APIs.',
@@ -80,7 +103,7 @@ const Projects = () => {
       year: '2026'
     },
     {
-      id: 2,
+      id: 3,
       title: 'LegalMind AI',
       shortDescription: 'Production-grade RAG system for legal document analysis',
       fullDescription: 'A production-grade RAG (Retrieval-Augmented Generation) system for intelligent legal document analysis with zero hallucinations. Built to help professionals analyze legal documents instantly by combining semantic search with AI generation to provide accurate, cited answers. The system processes 50-page legal PDFs in ~20 seconds, answers questions with exact citations, and prevents hallucinations through grounded responses. Uses Google Gemini 2.5 Flash Lite for text generation and HuggingFace all-MiniLM-L6-v2 for local embeddings, with FAISS for similarity search and MongoDB for metadata storage.',
@@ -103,7 +126,30 @@ const Projects = () => {
       year: '2026'
     },
     {
-      id: 3,
+      id: 4,
+      title: 'Student Development Tracker',
+      shortDescription: 'Holistic assessment platform for tracking student mental, emotional, and physical health with AI-powered insights',
+      fullDescription: 'A comprehensive mobile application for assessing, tracking, and improving the cognitive (IQ), physical, and emotional (EQ) development of K-12 students. Built with React Native and FastAPI, the system uses APAAR ID for unique student identification and integrates Cerebras LLM for intelligent test generation and personalized recommendations. Features include dynamic EQ/IQ assessments based on the EmoSocio model, physical health tracking with BMI calculations, AI-generated parent reports with targeted SEL activities, personalized Indian nutrition plans, and comprehensive PDF reports with visual charts. The platform supports three user roles: students for taking assessments, teachers for uploading physical data and managing records, and parents for viewing comprehensive reports and actionable remedies.',
+      techStack: ['React Native', 'Expo', 'FastAPI', 'MongoDB', 'Cerebras AI', 'JWT', 'Python', 'Chart.js'],
+      image: '/hack1.jpeg',
+      images: ['/hack1.jpeg', '/hack2.jpeg', '/hack3.jpeg', '/hack4.jpeg'],
+      category: 'Full Stack',
+      githubUrl: 'https://github.com/jayshinde0/standardised_evaluation',
+      liveUrl: '',
+      features: [
+        'AI-Powered Assessments - Dynamic EQ/IQ tests using Cerebras LLM',
+        'EmoSocio Model - 19 questions covering emotional competencies',
+        'Physical Health Tracking - BMI, fitness scores, and biometric data',
+        'Personalized Nutrition Plans - Indian diet recommendations with meal planning',
+        'Parent Dashboard - Comprehensive reports with AI-generated insights',
+        'PDF Report Generation - Professional reports with charts and analysis',
+        'Role-Based Access - Separate experiences for students, parents, teachers',
+        'Visual Analytics - Interactive charts for mental and physical health trends'
+      ],
+      year: '2025'
+    },
+    {
+      id: 5,
       title: 'Habit Tracker',
       shortDescription: 'Full-stack MERN habit tracking application',
       fullDescription: 'A comprehensive habit tracking application built with the MERN stack. Features JWT authentication for secure user sessions, an interactive monthly calendar view for visualizing habit completion, streak tracking to maintain motivation, and real-time progress updates. The clean minimal interface built with Tailwind CSS provides an intuitive user experience for managing daily habits and building consistent routines.',
@@ -126,7 +172,7 @@ const Projects = () => {
       year: '2026'
     },
     {
-      id: 4,
+      id: 6,
       title: 'InterviewAce',
       shortDescription: 'AI-powered interview preparation',
       fullDescription: 'An intelligent interview preparation platform that leverages AI to provide personalized mock interviews and learning paths. Built with Next.js and TypeScript, it offers comprehensive interview practice with real-time feedback, progress tracking, and detailed analytics to help candidates prepare effectively for technical interviews.',
@@ -149,7 +195,30 @@ const Projects = () => {
       year: '2025'
     },
     {
-      id: 5,
+      id: 7,
+      title: 'AuctionX',
+      shortDescription: 'Real-time AI auction platform with live bidding and team management',
+      fullDescription: 'A real-time auction platform designed for AI tools and problem statements at college fest events. Built with Next.js 14 and Supabase, the system features WebSocket-based real-time updates with zero latency, allowing teams to see auction items instantly without refreshing. The platform includes comprehensive admin controls for starting/ending auctions, managing teams with custom colors and balances, and updating leaderboards. Teams can track their balance, view purchased items, and participate in live auctions. The system uses PostgreSQL for data storage and Supabase Realtime for instant synchronization across all connected clients, making it perfect for high-energy auction events.',
+      techStack: ['Next.js 14', 'React', 'Supabase', 'PostgreSQL', 'WebSocket', 'Tailwind CSS', 'TypeScript'],
+      image: '/AI AUCTION WAR 1.png',
+      images: ['/AI AUCTION WAR 1.png', '/AI AUCTION WAR 2.png', '/AI AUCTION WAR 3.png', '/AI AUCTION WAR 4.png'],
+      category: 'Full Stack',
+      githubUrl: 'https://github.com/jayshinde0/AuctionX',
+      liveUrl: 'https://auction-x-three.vercel.app/',
+      features: [
+        'Real-time Auction View - See live items instantly with WebSocket',
+        'Team Dashboard - Track balance, purchases, and leaderboard',
+        'Admin Control Panel - Start/end auctions with one click',
+        'Item Management - Add/delete AI tools and problem statements',
+        'Team Management - Create teams with custom colors and balances',
+        'Live Updates - Zero latency synchronization via Supabase Realtime',
+        'Results Management - Update leaderboard and assign winners',
+        'Secure Authentication - Team-based and admin login system'
+      ],
+      year: '2026'
+    },
+    {
+      id: 8,
       title: 'Blooms Taxonomy QPG',
       shortDescription: 'AI-powered question paper generation using ML',
       fullDescription: 'An intelligent question paper generation system that automates the creation of educational assessments using Bloom\'s Taxonomy principles. The system uses machine learning techniques to analyze question difficulty levels and automatically predict appropriate marks. Built with Django and Python, it helps educators create balanced question papers that test different cognitive levels from remembering to creating.',
@@ -172,7 +241,7 @@ const Projects = () => {
       year: '2024'
     },
     {
-      id: 6,
+      id: 9,
       title: 'Flash AI',
       shortDescription: 'Stranger Things themed AI prompt challenge event',
       fullDescription: 'An immersive, Stranger Things-themed web application designed to host an AI prompt challenge event. The website creates a cinematic experience where students explore the dark world of the Upside Down while participating in 7 AI-powered challenges. Features include a cinematic Chronicles storytelling experience with VHS effects, progressive card unlocking system with puzzles, interactive spin wheel rewards, comprehensive screenshot protection, and advanced key logging for security. Built with React, TypeScript, and Framer Motion for smooth 60fps animations. The event uses a narrative-driven approach with strict time limits (75 minutes total, 60 seconds per card) and includes a dramatic book closing animation when all challenges are completed.',
@@ -195,7 +264,7 @@ const Projects = () => {
       year: '2026'
     },
     {
-      id: 7,
+      id: 10,
       title: 'Emergency Coordination System',
       shortDescription: 'AI-powered emergency response coordination platform',
       fullDescription: 'A comprehensive AI-powered emergency response coordination platform that connects victims, volunteers, and administrators for efficient emergency management. Features real-time communication via Socket.IO, interactive Google Maps integration for visual emergency locations, and smart volunteer matching. The system includes role-based access control with three user types: victims who can create and track emergency requests, volunteers who can accept and help with emergencies after admin verification, and administrators who manage the entire system. Built with modern tech stack including React, Node.js, MongoDB, and Socket.IO for real-time updates.',
@@ -218,7 +287,7 @@ const Projects = () => {
       year: '2026'
     },
     {
-      id: 8,
+      id: 11,
       title: 'BudgeStitch',
       shortDescription: 'Connect local tailors with customers',
       fullDescription: 'A comprehensive e-commerce platform that bridges the gap between local tailors and customers seeking affordable custom clothing. Users can browse tailor portfolios, select fabrics, provide measurements, and place orders for custom-tailored garments. The platform empowers local artisans while providing customers with personalized clothing options at competitive prices.',
@@ -241,7 +310,7 @@ const Projects = () => {
       year: '2024'
     },
     {
-      id: 9,
+      id: 12,
       title: 'Secure Transfer',
       shortDescription: 'Real-time file transfer on local network',
       fullDescription: 'A secure file transfer system designed for real-time transfers between devices on the same local network without requiring cloud storage. Built with React and Spring Boot, it uses WebSocket technology for instant file sharing with end-to-end encryption to ensure data privacy and security.',
@@ -264,7 +333,7 @@ const Projects = () => {
       year: '2024'
     },
     {
-      id: 10,
+      id: 13,
       title: 'LeetMetric',
       shortDescription: 'Track LeetCode performance visually',
       fullDescription: 'A performance tracking tool designed for competitive programmers to visualize their LeetCode progress. The application fetches user statistics and presents them through interactive charts and graphs using Chart.js, helping users identify strengths and areas for improvement. Built with vanilla JavaScript for lightweight, fast performance.',
@@ -287,7 +356,7 @@ const Projects = () => {
       year: '2024'
     },
     {
-      id: 11,
+      id: 14,
       title: 'InterviewAce',
       shortDescription: 'AI-powered interview preparation',
       fullDescription: 'An intelligent interview preparation platform that leverages AI to provide personalized mock interviews and learning paths. Built with Next.js and TypeScript, it offers comprehensive interview practice with real-time feedback, progress tracking, and detailed analytics to help candidates prepare effectively for technical interviews.',
@@ -310,7 +379,7 @@ const Projects = () => {
       year: '2025'
     },
     {
-      id: 12,
+      id: 15,
       title: 'Debuggers Club',
       shortDescription: 'Official club website with event management',
       fullDescription: 'The official website for Debugger\'s Club featuring comprehensive event management capabilities. Students can register for technical events, upload payment confirmations, and receive instant updates. The platform integrates with Google Sheets for seamless data management and uses Cloudinary for efficient image storage. Built with Next.js for optimal performance and SEO.',
@@ -333,7 +402,7 @@ const Projects = () => {
       year: '2025'
     },
     {
-      id: 13,
+      id: 16,
       title: 'Zennit UI',
       shortDescription: 'Modern component library for React',
       fullDescription: 'A comprehensive UI component library built with React and Tailwind CSS. Features over 50 customizable components with dark mode support and accessibility-first design. Perfect for rapidly building modern web applications with consistent design patterns and best practices.',
