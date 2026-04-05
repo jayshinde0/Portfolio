@@ -14,7 +14,7 @@ const AchievementsPreview = () => {
       description: "Team Lakshya from K.K. Wagh Institute has been selected as a Global Nominee in the NASA Space Apps Challenge 2025 — a prestigious international hackathon encouraging creative solutions for Earth and Space challenges.",
       skills: ["Space Technology", "AI", "Environmental Data Analytics", "Innovation"],
       color: "bg-white text-black",
-      imageFile: "Nasa_space app.png"
+      imageFile: "Nasa_space app.webp"
     },
     {
       icon: <Star className="w-8 h-8" />,
@@ -23,7 +23,7 @@ const AchievementsPreview = () => {
       description: "Made it to the Top 10 in the MET Eureka Idea Pitching Competition, pitching innovative ideas alongside brightest young entrepreneurs and pushing boundaries of creativity.",
       skills: ["Entrepreneurship", "Innovation", "Pitch Presentation", "Business Strategy"],
       color: "bg-white text-black",
-      imageFile: "MET Eureka.jpeg"
+      imageFile: "MET Eureka.webp"
     },
     {
       icon: <Award className="w-8 h-8" />,
@@ -32,7 +32,7 @@ const AchievementsPreview = () => {
       description: "Secured Top 15 Finalist position in Hacktopia hackathon by developing a Club Management Website with event coordination, membership tracking, and communication features.",
       skills: ["Web Development", "React.js", "Node.js", "Full Stack"],
       color: "bg-white text-black",
-      imageFile: "Hacktopia.jpg"
+      imageFile: "Hacktopia.webp"
     }
   ];
 

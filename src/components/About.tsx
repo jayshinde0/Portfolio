@@ -93,7 +93,7 @@ const About = () => {
                 <div className="flex justify-center mb-8">
                   <div className="relative">
                     <img
-                      src="/JAY_2.jpg"
+                      src="/JAY_2.webp"
                       alt="Jay Shinde"
                       className="w-32 h-32 rounded-full object-cover border-2 border-white/20"
                     />

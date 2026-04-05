@@ -117,7 +117,7 @@ const AboutPreview = () => {
             <div className="flex flex-col items-center">
               <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl mb-6">
                 <img
-                  src="/JAY_2.jpg"
+                  src="/JAY_2.webp"
                   alt="Jay Shinde"
                   className="w-full h-full object-cover"
                   onError={(e) => {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Award, Star, ExternalLink, Calendar, MapPin, Users, FileText, Globe, X } from 'lucide-react';
+import OptimizedImage from '../components/OptimizedImage';
 
 const AchievementsPage = () => {
   const [activeTab, setActiveTab] = useState('achievements');
@@ -15,7 +16,7 @@ const AchievementsPage = () => {
       location: "VIT Bibwewadi",
       description: "Selected as a finalist team at SpectraX'26, a 9-hour AI/ML hackathon focused on building intelligent solutions for real-world problems. Led a team of four members to design and develop StudyAssist AI, an intelligent study assistant that converts static learning materials into interactive and personalized learning experiences.",
       skills: ["AI/ML", "Local LLM", "Mistral", "Ollama", "React", "Node.js", "Adaptive Learning"],
-      imageFile: "SpectraX26.jpeg",
+      imageFile: "SpectraX26.webp",
       highlights: [
         "Led system design and AI workflow implementation",
         "Developed adaptive quiz generation and performance tracking logic",
@@ -33,7 +34,7 @@ const AchievementsPage = () => {
       location: "K.K. Wagh Institute, Nashik",
       description: "Team Lakshya selected as Global Nominee in NASA Space Apps Challenge 2025 — a prestigious international hackathon for Earth and Space challenges.",
       skills: ["Space Technology", "AI", "Environmental Data Analytics", "Innovation"],
-      imageFile: "Nasa_space app.png",
+      imageFile: "Nasa_space app.webp",
       highlights: [
         "Created animated visualization using NASA Terra's MODIS data",
         "Advanced to global judging stage among top nominees",
@@ -51,7 +52,7 @@ const AchievementsPage = () => {
       location: "PCCOE, Pune",
       description: "Developed a Club Management Website for event coordination and membership tracking. Secured Top 15 among 500+ participants in a 24-hour offline hackathon.",
       skills: ["React.js", "Node.js", "Full Stack", "UI/UX"],
-      imageFile: "Hacktopia.jpg",
+      imageFile: "Hacktopia.webp",
       highlights: [
         "Built Smart Club Connect platform addressing 'Broken Club Ecosystem'",
         "Solved invisibility crisis with centralized event discovery",
@@ -69,7 +70,7 @@ const AchievementsPage = () => {
       location: "E-Cell MET Bhujbal Knowledge City",
       description: "Made it to Top 10 in MET Eureka Idea Pitching Competition, pitching innovative ideas alongside brightest young entrepreneurs.",
       skills: ["Entrepreneurship", "Innovation", "Pitch Presentation"],
-      imageFile: "MET Eureka.jpeg",
+      imageFile: "MET Eureka.webp",
       highlights: [
         "Pitched scalable idea using technology and design thinking",
         "Received recognition for innovation and potential impact",
@@ -88,7 +89,7 @@ const AchievementsPage = () => {
       description: "Ranked among Top 18 out of 500 participants with 'Nomadia' - a visually immersive travel storytelling website blending minimalism and striking imagery.",
       skills: ["React.js", "Tailwind CSS", "ZennitUI", "Animation"],
       liveLink: "https://nomadia-livid.vercel.app/",
-      imageFile: "zennit_ui.png",
+      imageFile: "zennit_ui.webp",
       highlights: [
         "Built 5-section single-page website using React + Tailwind CSS",
         "Integrated ZennitUI carousel component for destinations gallery",
@@ -108,7 +109,7 @@ const AchievementsPage = () => {
       duration: "2025",
       description: "Exploring open source as part of Winter of Code Social 2025 as a Contributor. Over the past few months, contributed to multiple projects, learned how Git works in collaborative environments, and worked on resolving issues while interacting with the community. Grateful to the mentors, project admins, and the Code Social for their guidance and support throughout this journey.",
       skills: ["Open Source", "Git & GitHub", "Collaborative Development", "Community Engagement"],
-      imageFile: "WoCS2025_contributor_Jay_Nitin_Shinde.png",
+      imageFile: "WoCS2025_contributor_Jay_Nitin_Shinde.webp",
       highlights: [
         "Contributed to multiple open-source projects",
         "Learned Git workflows in collaborative environments",
@@ -123,7 +124,7 @@ const AchievementsPage = () => {
       duration: "2025-26",
       description: "Appointed as Website/ERP Coordinator for Debuggers' Club. Overseeing design, maintenance, and updates of club's website and ERP system.",
       skills: ["Web Development", "ERP Systems", "Technical Leadership"],
-      imageFile: "club1.jpeg"
+      imageFile: "club1.webp"
     },
     {
       icon: <Globe className="w-6 h-6" />,
@@ -132,17 +133,17 @@ const AchievementsPage = () => {
       duration: "2025",
       description: "Selected as Contributor for GSSoC '25 — collaborating on impactful open-source projects and enhancing real-world coding experience.",
       skills: ["Open Source", "Git & GitHub", "Software Development"],
-      imageFile: "ggsoc_1.png"
+      imageFile: "ggsoc_1.webp"
     }
   ];
 
   const certifications = [
-    { title: "Hands On React JS", issuer: "Training Course", date: "2024", imageFile: "React_page-0001.jpg" },
-    { title: "Blooms Taxonomy Research Paper", issuer: "IJSREM Journal", date: "2024", imageFile: "Paper_publish_page-0001.jpg" },
-    { title: "C++ Training Course", issuer: "Training Course", date: "2024", imageFile: "C++_page-0001.jpg" },
-    { title: "Java Training (IIT Bombay)", issuer: "Spoken Tutorial, IIT Bombay", date: "2024", imageFile: "JAVA_page-0001.jpg" },
-    { title: "Problem Solving - HackerRank", issuer: "HackerRank", date: "2024", imageFile: "problem_solving_basic certificate_page-0001.jpg" },
-    { title: "Git Basics", issuer: "Training Course", date: "2024", imageFile: "GITHUB_page-0001.jpg" }
+    { title: "Hands On React JS", issuer: "Training Course", date: "2024", imageFile: "React_page-0001.webp" },
+    { title: "Blooms Taxonomy Research Paper", issuer: "IJSREM Journal", date: "2024", imageFile: "Paper_publish_page-0001.webp" },
+    { title: "C++ Training Course", issuer: "Training Course", date: "2024", imageFile: "C++_page-0001.webp" },
+    { title: "Java Training (IIT Bombay)", issuer: "Spoken Tutorial, IIT Bombay", date: "2024", imageFile: "JAVA_page-0001.webp" },
+    { title: "Problem Solving - HackerRank", issuer: "HackerRank", date: "2024", imageFile: "problem_solving_basic certificate_page-0001.webp" },
+    { title: "Git Basics", issuer: "Training Course", date: "2024", imageFile: "GITHUB_page-0001.webp" }
   ];
 
   const tabs = [

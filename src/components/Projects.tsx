@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, X } from 'lucide-react';
 import './previews/ProjectModal.css';
+import OptimizedImage from './OptimizedImage';
 
 interface Project {
   id: number;
@@ -62,8 +63,8 @@ const Projects = () => {
       shortDescription: 'Intelligent HITL ticket management system with 10-agent AI pipeline for automated resolution',
       fullDescription: 'An enterprise-grade ticket management system that combines machine learning, natural language processing, and large language models to automate IT support workflows. The system features a 10-agent AI pipeline including NLP preprocessing with spaCy, sentiment analysis using HuggingFace Transformers, category/priority classification with scikit-learn, and RAG-powered response generation using Mistral-Nemo LLM via Ollama. Built with FastAPI and React, it includes ChromaDB for semantic search, real-time WebSocket updates, LIME explainability for predictions, and continuous learning through human-in-the-loop feedback. The system automatically classifies tickets, predicts SLA deadlines, detects duplicates, generates AI responses, and routes decisions based on confidence scores (≥85% auto-resolve, 60-85% suggest to agent, <60% escalate). Models automatically retrain when accuracy drops below 80%.',
       techStack: ['FastAPI', 'React', 'MongoDB', 'ChromaDB', 'Mistral-Nemo', 'Ollama', 'scikit-learn', 'HuggingFace', 'WebSocket'],
-      image: '/TicketFlow-AI 1.png',
-      images: ['/TicketFlow-AI 1.png', '/TicketFlow-AI 2.png', '/TicketFlow-AI 3.png', '/TicketFlow-AI 4.png', '/TicketFlow-AI 5.png', '/TicketFlow-AI 6.png'],
+      image: '/TicketFlow-AI 1.webp',
+      images: ['/TicketFlow-AI 1.webp', '/TicketFlow-AI 2.webp', '/TicketFlow-AI 3.webp', '/TicketFlow-AI 4.webp', '/TicketFlow-AI 5.webp', '/TicketFlow-AI 6.webp'],
       category: 'AI/ML',
       githubUrl: 'https://github.com/jayshinde0/TicketFlow-AI',
       liveUrl: '',
@@ -85,11 +86,11 @@ const Projects = () => {
       shortDescription: 'Adaptive study platform with AI-powered quiz generation',
       fullDescription: 'An intelligent study assistant that transforms static learning materials into interactive, personalized learning experiences. Upload content in multiple formats (PDFs, DOCX, TXT, YouTube videos) and the system automatically generates AI-powered quizzes while tracking topic-level performance. The adaptive learning engine analyzes your performance and adjusts future quizzes to focus on weaker areas, improving learning efficiency and retention. Uses local Mistral LLM via Ollama for privacy, reduced latency, and cost-efficient AI processing without relying on cloud APIs.',
       techStack: ['React', 'Node.js', 'MongoDB', 'Ollama', 'Mistral LLM', 'Express', 'Tailwind CSS'],
-      image: '/Study_Assistant_2.png',
-      images: ['/Study_Assistant_1.png', '/Study_Assistant_2.png', '/Study_Assistant_3.png'],
+      image: '/Study_Assistant_2.webp',
+      images: ['/Study_Assistant_1.webp', '/Study_Assistant_2.webp', '/Study_Assistant_3.webp'],
       category: 'AI/ML',
       githubUrl: 'https://github.com/jayshinde0/Study-Assistant-',
-      liveUrl: '',
+      liveUrl: 'https://study-flow-ivory-xi.vercel.app/',
       features: [
         'AI Quiz Generation - Context-aware questions from uploaded content',
         'Adaptive Learning Engine - Adjusts difficulty based on performance',
@@ -108,8 +109,8 @@ const Projects = () => {
       shortDescription: 'Production-grade RAG system for legal document analysis',
       fullDescription: 'A production-grade RAG (Retrieval-Augmented Generation) system for intelligent legal document analysis with zero hallucinations. Built to help professionals analyze legal documents instantly by combining semantic search with AI generation to provide accurate, cited answers. The system processes 50-page legal PDFs in ~20 seconds, answers questions with exact citations, and prevents hallucinations through grounded responses. Uses Google Gemini 2.5 Flash Lite for text generation and HuggingFace all-MiniLM-L6-v2 for local embeddings, with FAISS for similarity search and MongoDB for metadata storage.',
       techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'LangChain', 'Google Gemini', 'FAISS', 'HuggingFace', 'Tailwind CSS'],
-      image: '/Legal_ai_1.jpeg',
-      images: ['/Legal_ai_1.jpeg', '/Legal_ai_2.jpeg'],
+      image: '/Legal_ai_1.webp',
+      images: ['/Legal_ai_1.webp', '/Legal_ai_2.webp'],
       category: 'AI/ML',
       githubUrl: 'https://github.com/jayshinde0/LegalMind-AI',
       liveUrl: '',
@@ -131,8 +132,8 @@ const Projects = () => {
       shortDescription: 'Holistic assessment platform for tracking student mental, emotional, and physical health with AI-powered insights',
       fullDescription: 'A comprehensive mobile application for assessing, tracking, and improving the cognitive (IQ), physical, and emotional (EQ) development of K-12 students. Built with React Native and FastAPI, the system uses APAAR ID for unique student identification and integrates Cerebras LLM for intelligent test generation and personalized recommendations. Features include dynamic EQ/IQ assessments based on the EmoSocio model, physical health tracking with BMI calculations, AI-generated parent reports with targeted SEL activities, personalized Indian nutrition plans, and comprehensive PDF reports with visual charts. The platform supports three user roles: students for taking assessments, teachers for uploading physical data and managing records, and parents for viewing comprehensive reports and actionable remedies.',
       techStack: ['React Native', 'Expo', 'FastAPI', 'MongoDB', 'Cerebras AI', 'JWT', 'Python', 'Chart.js'],
-      image: '/hack1.jpeg',
-      images: ['/hack1.jpeg', '/hack2.jpeg', '/hack3.jpeg', '/hack4.jpeg'],
+      image: '/hack1.webp',
+      images: ['/hack1.webp', '/hack2.webp', '/hack3.webp', '/hack4.webp'],
       category: 'Full Stack',
       githubUrl: 'https://github.com/jayshinde0/standardised_evaluation',
       liveUrl: '',
@@ -154,8 +155,8 @@ const Projects = () => {
       shortDescription: 'Full-stack MERN habit tracking application',
       fullDescription: 'A comprehensive habit tracking application built with the MERN stack. Features JWT authentication for secure user sessions, an interactive monthly calendar view for visualizing habit completion, streak tracking to maintain motivation, and real-time progress updates. The clean minimal interface built with Tailwind CSS provides an intuitive user experience for managing daily habits and building consistent routines.',
       techStack: ['React', 'Node.js', 'MongoDB', 'Express', 'TypeScript', 'Tailwind CSS'],
-      image: '/Habit tracker.png',
-      images: ['/Habit tracker.png'],
+      image: '/Habit tracker.webp',
+      images: ['/Habit tracker.webp'],
       category: 'Full Stack',
       githubUrl: 'https://github.com/jayshinde0/Habit-Tracker',
       liveUrl: 'https://habit-tracker-iota-gray.vercel.app/',
@@ -177,8 +178,8 @@ const Projects = () => {
       shortDescription: 'AI-powered interview preparation',
       fullDescription: 'An intelligent interview preparation platform that leverages AI to provide personalized mock interviews and learning paths. Built with Next.js and TypeScript, it offers comprehensive interview practice with real-time feedback, progress tracking, and detailed analytics to help candidates prepare effectively for technical interviews.',
       techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'AI/ML'],
-      image: 'interview.png',
-      images: ['interview.png'],
+      image: 'interview.webp',
+      images: ['interview.webp'],
       category: 'AI/ML',
       githubUrl: 'https://github.com/jayshinde0/InterviewAcee',
       liveUrl: '',
@@ -200,8 +201,8 @@ const Projects = () => {
       shortDescription: 'Real-time AI auction platform with live bidding and team management',
       fullDescription: 'A real-time auction platform designed for AI tools and problem statements at college fest events. Built with Next.js 14 and Supabase, the system features WebSocket-based real-time updates with zero latency, allowing teams to see auction items instantly without refreshing. The platform includes comprehensive admin controls for starting/ending auctions, managing teams with custom colors and balances, and updating leaderboards. Teams can track their balance, view purchased items, and participate in live auctions. The system uses PostgreSQL for data storage and Supabase Realtime for instant synchronization across all connected clients, making it perfect for high-energy auction events.',
       techStack: ['Next.js 14', 'React', 'Supabase', 'PostgreSQL', 'WebSocket', 'Tailwind CSS', 'TypeScript'],
-      image: '/AI AUCTION WAR 1.png',
-      images: ['/AI AUCTION WAR 1.png', '/AI AUCTION WAR 2.png', '/AI AUCTION WAR 3.png', '/AI AUCTION WAR 4.png'],
+      image: '/AI AUCTION WAR 1.webp',
+      images: ['/AI AUCTION WAR 1.webp', '/AI AUCTION WAR 2.webp', '/AI AUCTION WAR 3.webp', '/AI AUCTION WAR 4.webp'],
       category: 'Full Stack',
       githubUrl: 'https://github.com/jayshinde0/AuctionX',
       liveUrl: 'https://auction-x-three.vercel.app/',
@@ -223,8 +224,8 @@ const Projects = () => {
       shortDescription: 'AI-powered question paper generation using ML',
       fullDescription: 'An intelligent question paper generation system that automates the creation of educational assessments using Bloom\'s Taxonomy principles. The system uses machine learning techniques to analyze question difficulty levels and automatically predict appropriate marks. Built with Django and Python, it helps educators create balanced question papers that test different cognitive levels from remembering to creating.',
       techStack: ['Django', 'Python', 'Scikit-learn', 'Pandas', 'NumPy'],
-      image: '/blooms.jpg',
-      images: ['/blooms.jpg'],
+      image: '/blooms.webp',
+      images: ['/blooms.webp'],
       category: 'AI/ML',
       githubUrl: 'https://github.com/jayshinde0/Blooms-Taxonomy-Based-Question-Paper-Generation',
       liveUrl: 'https://blooms-taxonomy-generator.netlify.app',
@@ -246,8 +247,8 @@ const Projects = () => {
       shortDescription: 'Stranger Things themed AI prompt challenge event',
       fullDescription: 'An immersive, Stranger Things-themed web application designed to host an AI prompt challenge event. The website creates a cinematic experience where students explore the dark world of the Upside Down while participating in 7 AI-powered challenges. Features include a cinematic Chronicles storytelling experience with VHS effects, progressive card unlocking system with puzzles, interactive spin wheel rewards, comprehensive screenshot protection, and advanced key logging for security. Built with React, TypeScript, and Framer Motion for smooth 60fps animations. The event uses a narrative-driven approach with strict time limits (75 minutes total, 60 seconds per card) and includes a dramatic book closing animation when all challenges are completed.',
       techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'React Router', 'IndexedDB'],
-      image: '/Flash_ai_1.jpeg',
-      images: ['/Flash_ai_1.jpeg', '/Flash_ai_2.jpeg', '/Flash_ai_3.jpeg', '/Flash_ai_4.jpeg', '/Flash_ai_5.jpeg'],
+      image: '/Flash_ai_1.webp',
+      images: ['/Flash_ai_1.webp', '/Flash_ai_2.webp', '/Flash_ai_3.webp', '/Flash_ai_4.webp', '/Flash_ai_5.webp'],
       category: 'Frontend',
       githubUrl: 'https://github.com/jayshinde0/Flash-AI',
       liveUrl: 'https://flash-ai.vercel.app',
@@ -269,8 +270,8 @@ const Projects = () => {
       shortDescription: 'AI-powered emergency response coordination platform',
       fullDescription: 'A comprehensive AI-powered emergency response coordination platform that connects victims, volunteers, and administrators for efficient emergency management. Features real-time communication via Socket.IO, interactive Google Maps integration for visual emergency locations, and smart volunteer matching. The system includes role-based access control with three user types: victims who can create and track emergency requests, volunteers who can accept and help with emergencies after admin verification, and administrators who manage the entire system. Built with modern tech stack including React, Node.js, MongoDB, and Socket.IO for real-time updates.',
       techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Socket.IO', 'Google Maps API', 'JWT', 'Tailwind CSS'],
-      image: '/Emergency-Volunteer-Coordination-System_1.png',
-      images: ['/Emergency-Volunteer-Coordination-System_1.png', '/Emergency-Volunteer-Coordination-System_2.png', '/Emergency-Volunteer-Coordination-System_3.png', '/Emergency-Volunteer-Coordination-System_4.png', '/Emergency-Volunteer-Coordination-System_5.png'],
+      image: '/Emergency-Volunteer-Coordination-System_1.webp',
+      images: ['/Emergency-Volunteer-Coordination-System_1.webp', '/Emergency-Volunteer-Coordination-System_2.webp', '/Emergency-Volunteer-Coordination-System_3.webp', '/Emergency-Volunteer-Coordination-System_4.webp', '/Emergency-Volunteer-Coordination-System_5.webp'],
       category: 'Full Stack',
       githubUrl: 'https://github.com/jayshinde0/Emergency-Volunteer-Coordination-System',
       liveUrl: '',
@@ -292,8 +293,8 @@ const Projects = () => {
       shortDescription: 'Connect local tailors with customers',
       fullDescription: 'A comprehensive e-commerce platform that bridges the gap between local tailors and customers seeking affordable custom clothing. Users can browse tailor portfolios, select fabrics, provide measurements, and place orders for custom-tailored garments. The platform empowers local artisans while providing customers with personalized clothing options at competitive prices.',
       techStack: ['Django', 'Python', 'SQLite', 'HTML', 'CSS', 'JavaScript'],
-      image: '/Budge.png',
-      images: ['/Budge.png'],
+      image: '/Budge.webp',
+      images: ['/Budge.webp'],
       category: 'E-Commerce',
       githubUrl: 'https://github.com/jayshinde0/BudgeStitch',
       liveUrl: 'https://budgestitch.netlify.app',
@@ -316,7 +317,7 @@ const Projects = () => {
       fullDescription: 'A secure file transfer system designed for real-time transfers between devices on the same local network without requiring cloud storage. Built with React and Spring Boot, it uses WebSocket technology for instant file sharing with end-to-end encryption to ensure data privacy and security.',
       techStack: ['React', 'Spring Boot', 'WebSocket', 'HTML5', 'CSS3'],
       image: 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800',
-      images: ['https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800'],
+      images: ['https://images.pexels.com/photos/1181675/pexels-photo-1181675.webp?auto=compress&cs=tinysrgb&w=800'],
       category: 'Full Stack',
       githubUrl: 'https://github.com/jayshinde0/File-flow',
       liveUrl: '',
@@ -339,7 +340,7 @@ const Projects = () => {
       fullDescription: 'A performance tracking tool designed for competitive programmers to visualize their LeetCode progress. The application fetches user statistics and presents them through interactive charts and graphs using Chart.js, helping users identify strengths and areas for improvement. Built with vanilla JavaScript for lightweight, fast performance.',
       techStack: ['HTML', 'CSS', 'JavaScript', 'Chart.js', 'LeetCode API'],
       image: 'https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=800',
-      images: ['https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?auto=compress&cs=tinysrgb&w=800'],
+      images: ['https://images.pexels.com/photos/577585/pexels-photo-577585.webp?auto=compress&cs=tinysrgb&w=800'],
       category: 'Frontend',
       githubUrl: 'https://github.com/jayshinde0/LeetMetric',
       liveUrl: 'https://leetmetric.netlify.app',
@@ -361,8 +362,8 @@ const Projects = () => {
       shortDescription: 'AI-powered interview preparation',
       fullDescription: 'An intelligent interview preparation platform that leverages AI to provide personalized mock interviews and learning paths. Built with Next.js and TypeScript, it offers comprehensive interview practice with real-time feedback, progress tracking, and detailed analytics to help candidates prepare effectively for technical interviews.',
       techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'AI/ML'],
-      image: 'interview.png',
-      images: ['interview.png'],
+      image: 'interview.webp',
+      images: ['interview.webp'],
       category: 'Full Stack',
       githubUrl: 'https://github.com/jayshinde0/InterviewAcee',
       liveUrl: '',
@@ -384,8 +385,8 @@ const Projects = () => {
       shortDescription: 'Official club website with event management',
       fullDescription: 'The official website for Debugger\'s Club featuring comprehensive event management capabilities. Students can register for technical events, upload payment confirmations, and receive instant updates. The platform integrates with Google Sheets for seamless data management and uses Cloudinary for efficient image storage. Built with Next.js for optimal performance and SEO.',
       techStack: ['Next.js', 'MongoDB', 'Cloudinary', 'TypeScript', 'Google Sheets API'],
-      image: 'Debuggers.png',
-      images: ['Debuggers.png'],
+      image: 'Debuggers.webp',
+      images: ['Debuggers.webp'],
       category: 'Full Stack',
       githubUrl: '',
       liveUrl: 'https://debuggers-club.vercel.app/',
@@ -407,8 +408,8 @@ const Projects = () => {
       shortDescription: 'Modern component library for React',
       fullDescription: 'A comprehensive UI component library built with React and Tailwind CSS. Features over 50 customizable components with dark mode support and accessibility-first design. Perfect for rapidly building modern web applications with consistent design patterns and best practices.',
       techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-      image: '/zennit_ui.png',
-      images: ['/zennit_ui.png'],
+      image: '/zennit_ui.webp',
+      images: ['/zennit_ui.webp'],
       category: 'Frontend',
       githubUrl: 'https://github.com/jayshinde0/zennit-ui',
       liveUrl: 'https://zennit-ui.vercel.app/',
@@ -490,9 +491,10 @@ const Projects = () => {
               <div className="relative overflow-hidden rounded-2xl bg-neutral-900 border border-white/5 hover:border-white/20 transition-all duration-500 h-[350px]">
                 {/* Image */}
                 <div className="absolute inset-0">
-                  <img
+                  <OptimizedImage
                     src={project.image}
                     alt={project.title}
+                    loading="lazy"
                     className="w-full h-full object-cover opacity-50 group-hover:opacity-30 group-hover:scale-105 transition-all duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
@@ -558,10 +560,12 @@ const Projects = () => {
                     <div className="relative bg-neutral-800 border-b border-white/10" style={{ paddingBottom: '40%' }}>
                       {/* Images */}
                       {selectedProject.images.map((img, index) => (
-                        <img
+                        <OptimizedImage
                           key={index}
                           src={img}
                           alt={`${selectedProject.title} screenshot ${index + 1}`}
+                          loading={index === 0 ? "eager" : "lazy"}
+                          priority={index === 0}
                           className={`absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-700 ${
                             index === currentImageIndex ? 'opacity-100' : 'opacity-0'
                           }`}
