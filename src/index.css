@@ -4,8 +4,27 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     scroll-padding-top: 80px; /* Account for fixed navbar */
+  }
+  
+  html.lenis {
+    height: auto;
+  }
+  
+  .lenis.lenis-smooth {
+    scroll-behavior: auto;
+  }
+  
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
   }
   
   body {
@@ -25,11 +44,6 @@
   @font-face {
     font-family: 'Orbitron';
     font-display: swap;
-  }
-  
-  /* Smooth scrolling for all scrollable elements */
-  * {
-    scroll-behavior: smooth;
   }
   
   /* Custom scrollbar styling */

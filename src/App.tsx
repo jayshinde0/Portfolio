@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import Preloader from './components/Preloader';
+import { useLenis } from './hooks/useLenis';
 
 // Lazy load non-critical pages
 const AboutPage = lazy(() => import('./pages/AboutPage'));
@@ -18,7 +19,8 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Smooth scroll to top on route change
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [pathname]);
 
   return null;
@@ -49,7 +51,7 @@ function AppContent() {
     setPrevPath(location.pathname);
   }, [location.pathname]);
 
-  // Page transition variants
+  // Page transition variants - optimized for GPU
   const pageVariants = {
     initial: {
       x: direction > 0 ? '100%' : '-100%',
@@ -59,16 +61,26 @@ function AppContent() {
       x: 0,
       opacity: 1,
       transition: {
-        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.3 },
+        x: { 
+          type: 'spring' as const, 
+          stiffness: 400, 
+          damping: 40,
+          mass: 0.8,
+        },
+        opacity: { duration: 0.2 },
       },
     },
     exit: {
       x: direction > 0 ? '-100%' : '100%',
       opacity: 0,
       transition: {
-        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 },
+        x: { 
+          type: 'spring' as const, 
+          stiffness: 400, 
+          damping: 40,
+          mass: 0.8,
+        },
+        opacity: { duration: 0.15 },
       },
     },
   };
@@ -89,7 +101,8 @@ function AppContent() {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="overflow-hidden"
+          className="overflow-hidden gpu-accelerated"
+          style={{ willChange: 'transform, opacity' }}
         >
           <Suspense fallback={
             <div className="min-h-screen flex items-center justify-center">
@@ -123,6 +136,9 @@ function AppContent() {
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true);
+  
+  // Initialize Lenis smooth scrolling
+  useLenis();
 
   return (
     <Router>
