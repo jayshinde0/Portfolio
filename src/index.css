@@ -11,6 +11,18 @@
     font-family: 'Inter', sans-serif;
     background: #000000;
     color: #ffffff;
+    font-display: swap;
+  }
+  
+  /* Optimize font loading */
+  @font-face {
+    font-family: 'Inter';
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Orbitron';
+    font-display: swap;
   }
 }
 
@@ -29,6 +41,20 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  
+  /* Performance optimizations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  .contain-paint {
+    contain: paint;
+  }
+  
+  .contain-layout {
+    contain: layout;
   }
 }
 

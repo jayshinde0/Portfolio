@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     exclude: ['lucide-react'],
+    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
   },
   build: {
     rollupOptions: {
@@ -22,9 +23,23 @@ export default defineConfig({
     terserOptions: {
       compress: {
         drop_console: true, // Remove console.logs in production
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
       },
     },
+    // Optimize chunk size
+    chunkSizeWarningLimit: 1000,
+    // Enable CSS code splitting
+    cssCodeSplit: true,
+    // Source maps for debugging (disable in production for smaller size)
+    sourcemap: false,
+    // Image optimization settings - inline assets smaller than 4kb as base64
+    assetsInlineLimit: 4096,
   },
-  // Image optimization settings
-  assetsInlineLimit: 4096, // Inline assets smaller than 4kb as base64
+  // Server configuration for development
+  server: {
+    hmr: {
+      overlay: false, // Disable error overlay for better performance
+    },
+  },
 });

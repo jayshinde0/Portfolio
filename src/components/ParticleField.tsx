@@ -8,7 +8,7 @@ const ParticleField = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
     if (!ctx) return;
 
     let animationFrameId: number;
@@ -42,54 +42,67 @@ const ParticleField = () => {
     };
 
     const initParticles = () => {
-      const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+      // Reduce particle count for better performance
+      const particleCount = Math.floor((canvas.width * canvas.height) / 20000);
       particles.length = 0;
       for (let i = 0; i < particleCount; i++) {
         particles.push(createParticle());
       }
     };
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let lastTime = 0;
+    const targetFPS = 60;
+    const frameInterval = 1000 / targetFPS;
 
-      particles.forEach((particle, index) => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+    const animate = (currentTime: number) => {
+      const deltaTime = currentTime - lastTime;
 
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+      if (deltaTime >= frameInterval) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.globalAlpha = particle.opacity;
-        ctx.fill();
+        particles.forEach((particle, index) => {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
 
-        // Connect nearby particles
-        particles.slice(index + 1).forEach(otherParticle => {
-          const dx = particle.x - otherParticle.x;
-          const dy = particle.y - otherParticle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+          if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
 
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = particle.color;
-            ctx.globalAlpha = (1 - distance / 100) * 0.2;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fillStyle = particle.color;
+          ctx.globalAlpha = particle.opacity;
+          ctx.fill();
+
+          // Reduce connection checks for performance
+          if (index % 2 === 0) {
+            particles.slice(index + 1, index + 5).forEach(otherParticle => {
+              const dx = particle.x - otherParticle.x;
+              const dy = particle.y - otherParticle.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+
+              if (distance < 100) {
+                ctx.beginPath();
+                ctx.moveTo(particle.x, particle.y);
+                ctx.lineTo(otherParticle.x, otherParticle.y);
+                ctx.strokeStyle = particle.color;
+                ctx.globalAlpha = (1 - distance / 100) * 0.2;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            });
           }
         });
-      });
 
-      ctx.globalAlpha = 1;
+        ctx.globalAlpha = 1;
+        lastTime = currentTime;
+      }
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
     resizeCanvas();
     initParticles();
-    animate();
+    animationFrameId = requestAnimationFrame(animate);
 
     const handleResize = () => {
       resizeCanvas();
@@ -107,7 +120,7 @@ const ParticleField = () => {
   return (
     <motion.canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none"
+      className="absolute inset-0 pointer-events-none gpu-accelerated"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 2 }}

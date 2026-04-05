@@ -9,40 +9,35 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
   const [phase, setPhase] = useState<'together' | 'split' | 'photos' | 'expand' | 'done'>('together');
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // Photos to cycle through in the box
-  const photos = ['/club1.jpeg', '/JAY_2.jpg', '/Hacktopia2.jpg', '/JAY_3.jpg'];
+  // Photos to cycle through in the box - optimized with WebP
+  const photos = ['/club1.webp', '/JAY_2.jpg', '/Hacktopia2.webp', '/JAY_3.jpg'];
   const [currentPhoto, setCurrentPhoto] = useState(0);
 
-  // Preload images for smooth transitions
+  // Preload images for smooth transitions - optimized
   useEffect(() => {
     const imagePromises = photos.map((src) => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const img = new Image();
         img.src = src;
+        img.loading = 'eager';
+        img.decoding = 'async';
         img.onload = resolve;
-        img.onerror = reject;
+        img.onerror = resolve; // Continue even if image fails
       });
     });
 
     Promise.all(imagePromises)
       .then(() => setImagesLoaded(true))
-      .catch(() => setImagesLoaded(true)); // Continue even if some images fail
+      .catch(() => setImagesLoaded(true));
   }, []);
 
   useEffect(() => {
     if (!imagesLoaded) return;
 
     const timer1 = setTimeout(() => setPhase('split'), 800);
-    
-    // Phase 2: Split and show box with photos for 2s
     const timer2 = setTimeout(() => setPhase('photos'), 1200);
-    
-    // Phase 3: Expand box to full screen after photos
     const timer3 = setTimeout(() => setPhase('expand'), 3500);
-    
-    // Phase 4: Complete
     const timer4 = setTimeout(() => setPhase('done'), 4300);
-    
     const timer5 = setTimeout(() => onComplete(), 4500);
 
     return () => {
@@ -78,7 +73,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
           <div className="relative flex items-center justify-center w-full max-w-screen-xl">
             {/* JAY */}
             <motion.span
-              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap"
+              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap gpu-accelerated"
               style={{ fontFamily: 'Georgia, serif' }}
               initial={{ x: 0, opacity: 1 }}
               animate={{
@@ -95,7 +90,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
 
             {/* Black Box with Photos */}
             <motion.div
-              className="bg-black rounded-xl md:rounded-2xl overflow-hidden flex items-center justify-center"
+              className="bg-black rounded-xl md:rounded-2xl overflow-hidden flex items-center justify-center gpu-accelerated"
               initial={{ width: 0, height: 0, opacity: 0, margin: 0 }}
               animate={{
                 width: phase === 'together' ? 0 : phase === 'expand' ? '100vw' : window.innerWidth < 640 ? 140 : window.innerWidth < 768 ? 180 : 240,
@@ -118,7 +113,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
                       key={photo}
                       src={photo}
                       alt={`Jay ${index + 1}`}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover gpu-accelerated"
                       loading="eager"
                       decoding="async"
                       initial={{ opacity: 0 }}
@@ -135,7 +130,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
 
             {/* SHINDE */}
             <motion.span
-              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap"
+              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap gpu-accelerated"
               style={{ fontFamily: 'Georgia, serif' }}
               initial={{ x: 0, opacity: 1 }}
               animate={{

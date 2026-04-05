@@ -9,8 +9,6 @@ import TechStackPreview from '../components/previews/TechStackPreview';
 import ContactPreview from '../components/previews/ContactPreview';
 import Terminal from '../components/Terminal';
 import Squares from '../components/Squares';
-import CodingStats from '../components/CodingStats';
-import ErrorBoundary from '../components/ErrorBoundary';
 
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -94,13 +92,6 @@ const HomePage = () => {
       {/* Tech Stack Section */}
       <section id="tech-stack">
         <TechStackPreview />
-      </section>
-
-      {/* Coding Stats Section */}
-      <section id="coding-stats">
-        <ErrorBoundary>
-          <CodingStats />
-        </ErrorBoundary>
       </section>
 
       {/* Contact Section */}
