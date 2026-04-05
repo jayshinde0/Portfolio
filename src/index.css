@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Account for fixed navbar */
   }
   
   body {
@@ -12,6 +13,7 @@
     background: #000000;
     color: #ffffff;
     font-display: swap;
+    overflow-x: hidden; /* Prevent horizontal scroll during transitions */
   }
   
   /* Optimize font loading */
@@ -23,6 +25,29 @@
   @font-face {
     font-family: 'Orbitron';
     font-display: swap;
+  }
+  
+  /* Smooth scrolling for all scrollable elements */
+  * {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #000000;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
   }
 }
 
@@ -55,6 +80,17 @@
   
   .contain-layout {
     contain: layout;
+  }
+  
+  /* Smooth transitions */
+  .smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Page transition container */
+  .page-transition {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
   }
 }
 
