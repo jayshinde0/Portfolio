@@ -17,7 +17,6 @@ const QUALITY = 85; // 85 is a good balance between quality and size
 
 console.log('🖼️  Starting image conversion to WebP...\n');
 
-// Get all files in public directory
 const files = fs.readdirSync(inputDir);
 
 let convertedCount = 0;
