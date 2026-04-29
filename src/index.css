@@ -48,7 +48,7 @@
   
   /* Custom scrollbar styling */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
   
   ::-webkit-scrollbar-track {
@@ -56,12 +56,35 @@
   }
   
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+@layer components {
+  /* ── Hero Button Styles ── */
+  .hero-btn-primary {
+    @apply px-5 py-3 sm:px-7 sm:py-3.5 bg-white text-black rounded-full font-medium text-xs sm:text-sm tracking-wide;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hero-btn-primary:hover {
+    @apply bg-gray-200;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+  }
+
+  .hero-btn-secondary {
+    @apply px-5 py-3 sm:px-7 sm:py-3.5 border border-white/20 rounded-full text-white font-medium text-xs sm:text-sm tracking-wide flex items-center gap-2;
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hero-btn-secondary:hover {
+    @apply border-white/40;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -106,17 +129,27 @@
     will-change: transform, opacity;
     backface-visibility: hidden;
   }
+
+  /* Neon glow text utility */
+  .text-glow-blue {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.2);
+  }
 }
 
 /* Minimal glass effect - B&W theme */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Subtle hover glow */
 .hover-glow:hover {
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+/* Blue accent hover glow */
+.hover-glow-blue:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
 }

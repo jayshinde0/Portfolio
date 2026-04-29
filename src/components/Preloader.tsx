@@ -13,6 +13,16 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
   const photos = ['/club1.webp', '/JAY_2.jpg', '/Hacktopia2.webp', '/JAY_3.jpg'];
   const [currentPhoto, setCurrentPhoto] = useState(0);
 
+  // Track whether we're on mobile for animation values
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Preload images for smooth transitions - optimized
   useEffect(() => {
     const imagePromises = photos.map((src) => {
@@ -58,11 +68,41 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
     }
   }, [phase, photos.length]);
 
+  // Responsive animation values
+  const getTextOffset = () => {
+    if (phase === 'together') return 0;
+    if (phase === 'expand') return isMobile ? '-40vw' : '-50vw';
+    return isMobile ? -50 : -130;
+  };
+
+  const getTextOffsetRight = () => {
+    if (phase === 'together') return 0;
+    if (phase === 'expand') return isMobile ? '40vw' : '50vw';
+    return isMobile ? 50 : 130;
+  };
+
+  const getBoxWidth = () => {
+    if (phase === 'together') return 0;
+    if (phase === 'expand') return '100vw';
+    return isMobile ? 120 : 240;
+  };
+
+  const getBoxHeight = () => {
+    if (phase === 'together') return 0;
+    if (phase === 'expand') return '100vh';
+    return isMobile ? 85 : 180;
+  };
+
+  const getBoxMargin = () => {
+    if (phase === 'together' || phase === 'expand') return 0;
+    return isMobile ? '0 8px' : '0 24px';
+  };
+
   return (
     <AnimatePresence>
       {phase !== 'done' ? (
         <motion.div
-          className="fixed inset-0 z-[100] bg-white flex items-center justify-center overflow-hidden px-4"
+          className="fixed inset-0 z-[100] bg-white flex items-center justify-center overflow-hidden px-3 sm:px-4"
           animate={{
             backgroundColor: phase === 'expand' ? '#000000' : '#ffffff',
           }}
@@ -73,11 +113,11 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
           <div className="relative flex items-center justify-center w-full max-w-screen-xl">
             {/* JAY */}
             <motion.span
-              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap gpu-accelerated"
+              className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap gpu-accelerated"
               style={{ fontFamily: 'Georgia, serif' }}
               initial={{ x: 0, opacity: 1 }}
               animate={{
-                x: phase === 'together' ? 0 : phase === 'expand' ? '-50vw' : window.innerWidth < 640 ? -60 : window.innerWidth < 768 ? -80 : -130,
+                x: getTextOffset(),
                 opacity: phase === 'expand' ? 0 : 1,
               }}
               transition={{ 
@@ -90,14 +130,14 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
 
             {/* Black Box with Photos */}
             <motion.div
-              className="bg-black rounded-xl md:rounded-2xl overflow-hidden flex items-center justify-center gpu-accelerated"
+              className="bg-black rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden flex items-center justify-center gpu-accelerated"
               initial={{ width: 0, height: 0, opacity: 0, margin: 0 }}
               animate={{
-                width: phase === 'together' ? 0 : phase === 'expand' ? '100vw' : window.innerWidth < 640 ? 140 : window.innerWidth < 768 ? 180 : 240,
-                height: phase === 'together' ? 0 : phase === 'expand' ? '100vh' : window.innerWidth < 640 ? 100 : window.innerWidth < 768 ? 130 : 180,
+                width: getBoxWidth(),
+                height: getBoxHeight(),
                 opacity: phase === 'together' ? 0 : 1,
-                margin: phase === 'together' ? 0 : phase === 'expand' ? 0 : window.innerWidth < 640 ? '0 12px' : '0 24px',
-                borderRadius: phase === 'expand' ? 0 : window.innerWidth < 640 ? 12 : 16,
+                margin: getBoxMargin(),
+                borderRadius: phase === 'expand' ? 0 : isMobile ? 8 : 16,
               }}
               transition={{ 
                 duration: phase === 'expand' ? 0.6 : 0.5, 
@@ -130,11 +170,11 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
 
             {/* SHINDE */}
             <motion.span
-              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap gpu-accelerated"
+              className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black italic tracking-tight select-none whitespace-nowrap gpu-accelerated"
               style={{ fontFamily: 'Georgia, serif' }}
               initial={{ x: 0, opacity: 1 }}
               animate={{
-                x: phase === 'together' ? 0 : phase === 'expand' ? '50vw' : window.innerWidth < 640 ? 60 : window.innerWidth < 768 ? 80 : 130,
+                x: getTextOffsetRight(),
                 opacity: phase === 'expand' ? 0 : 1,
               }}
               transition={{ 

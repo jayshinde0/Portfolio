@@ -1,8 +1,97 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, X } from 'lucide-react';
+import { ExternalLink, Github, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './previews/ProjectModal.css';
 import OptimizedImage from './OptimizedImage';
+
+// ── Folder HUD canvas ─────────────────────────────────────────────────────────
+const FolderHUD = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    let animId: number;
+    let t = 0;
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.parentElement!.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    const draw = () => {
+      const w = canvas.parentElement!.getBoundingClientRect().width;
+      const h = canvas.parentElement!.getBoundingClientRect().height;
+      ctx.clearRect(0, 0, w, h);
+      t += 0.005;
+      const cx = w / 2, cy = h / 2;
+      // glow
+      const glow = ctx.createRadialGradient(cx, cy, 10, cx, cy, w * 0.5);
+      glow.addColorStop(0, 'rgba(59,130,246,0.08)');
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, h);
+      // orbit rings
+      for (let i = 0; i < 3; i++) {
+        const r = 52 + i * 22;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(t * (1.4 - i * 0.35) + i);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, r, r * 0.32, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(99,162,255,${0.14 - i * 0.035})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.restore();
+      }
+      // folder body
+      const s = 26;
+      ctx.save();
+      ctx.translate(cx, cy + Math.sin(t * 1.8) * 3.5);
+      ctx.strokeStyle = 'rgba(99,162,255,0.55)';
+      ctx.lineWidth = 1.5;
+      ctx.lineJoin = 'round';
+      // tab
+      ctx.beginPath();
+      ctx.moveTo(-s, -s * 0.15);
+      ctx.lineTo(-s * 0.2, -s * 0.15);
+      ctx.lineTo(-s * 0.05, -s * 0.4);
+      ctx.lineTo(s * 0.5, -s * 0.4);
+      ctx.lineTo(s * 0.5, -s * 0.15);
+      ctx.stroke();
+      // body
+      ctx.strokeRect(-s, -s * 0.15, s * 2, s * 1.2);
+      // </> symbol inside
+      ctx.font = `bold ${s * 0.55}px monospace`;
+      ctx.fillStyle = 'rgba(99,162,255,0.6)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('</>', 0, s * 0.45);
+      ctx.restore();
+      // particles
+      for (let i = 0; i < 4; i++) {
+        const px = cx + Math.sin(t * 0.6 + i * 1.7) * 72;
+        const py = cy + Math.cos(t * 0.45 + i * 1.2) * 48;
+        ctx.fillStyle = `rgba(99,162,255,${0.18 + Math.sin(t + i) * 0.08})`;
+        ctx.beginPath();
+        ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      animId = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(animId); };
+  }, []);
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />;
+};
+
 
 interface Project {
   id: number;
@@ -24,37 +113,73 @@ const Projects = () => {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('All Projects');
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const categories = ['All Projects', 'AI/ML', 'Full Stack', 'Frontend', 'E-Commerce'];
 
-  // Lock body scroll when modal is open
+  const closeModal = useCallback(() => {
+    setSelectedProject(null);
+  }, []);
+
+  // Lock body scroll + ESC key
   useEffect(() => {
-    if (selectedProject) {
-      document.body.classList.add('modal-open');
-      document.body.style.overflow = 'hidden';
-      setCurrentImageIndex(0); // Reset carousel when opening modal
-    } else {
-      document.body.classList.remove('modal-open');
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.classList.remove('modal-open');
-      document.body.style.overflow = '';
+    const html = document.documentElement;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (lightboxImage) setLightboxImage(null);
+        else closeModal();
+      }
     };
-  }, [selectedProject]);
+    if (selectedProject) {
+      // Freeze scroll: save position then lock body
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.overflow = 'hidden';
+      setCurrentImageIndex(0);
+      if (contentRef.current) contentRef.current.scrollTop = 0;
+      requestAnimationFrame(() => {
+        if (contentRef.current) contentRef.current.scrollTop = 0;
+      });
+    } else {
+      // Restore scroll position
+      const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      window.scrollTo(0, scrollY);
+    }
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      // Always restore body on cleanup
+      const scrollY = Math.abs(parseInt(document.body.style.top || '0'));
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      if (scrollY) window.scrollTo(0, scrollY);
+    };
+  }, [selectedProject, closeModal, lightboxImage]);
 
   // Auto-slide carousel
   useEffect(() => {
-    if (!selectedProject || !selectedProject.images || selectedProject.images.length <= 1) return;
-
+    if (!selectedProject?.images || selectedProject.images.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => 
+      setCurrentImageIndex((prev) =>
         prev === selectedProject.images!.length - 1 ? 0 : prev + 1
       );
-    }, 4000); // Change image every 4 seconds
-
+    }, 4000);
     return () => clearInterval(interval);
-  }, [selectedProject, currentImageIndex]);
+  }, [selectedProject]);
 
   const projects: Project[] = [
     {
@@ -64,7 +189,7 @@ const Projects = () => {
       fullDescription: 'An enterprise-grade ticket management system that combines machine learning, natural language processing, and large language models to automate IT support workflows. The system features a 10-agent AI pipeline including NLP preprocessing with spaCy, sentiment analysis using HuggingFace Transformers, category/priority classification with scikit-learn, and RAG-powered response generation using Mistral-Nemo LLM via Ollama. Built with FastAPI and React, it includes ChromaDB for semantic search, real-time WebSocket updates, LIME explainability for predictions, and continuous learning through human-in-the-loop feedback. The system automatically classifies tickets, predicts SLA deadlines, detects duplicates, generates AI responses, and routes decisions based on confidence scores (≥85% auto-resolve, 60-85% suggest to agent, <60% escalate). Models automatically retrain when accuracy drops below 80%.',
       techStack: ['FastAPI', 'React', 'MongoDB', 'ChromaDB', 'Mistral-Nemo', 'Ollama', 'scikit-learn', 'HuggingFace', 'WebSocket'],
       image: '/TicketFlow-AI 1.webp',
-      images: ['/TicketFlow-AI 1.webp', '/TicketFlow-AI 2.webp', '/TicketFlow-AI 3.webp', '/TicketFlow-AI 4.webp', '/TicketFlow-AI 5.webp', '/TicketFlow-AI 6.webp'],
+      images: ['/TicketFlow-AI 1.webp', '/TicketFlow-AI 2.webp', '/TicketFlow-AI 3.webp', '/TicketFlow-AI 4.webp', '/TicketFlow-AI 5.webp'],
       category: 'AI/ML',
       githubUrl: 'https://github.com/jayshinde0/TicketFlow-AI',
       liveUrl: '',
@@ -433,39 +558,48 @@ const Projects = () => {
     : projects.filter(project => project.category === selectedCategory);
 
   return (
-    <section className="py-12 px-4 bg-black relative z-10 min-h-screen">
-      <div className="max-w-7xl mx-auto">
+    <>
+    <section className="relative py-16 sm:py-24 px-4 sm:px-6 bg-black min-h-screen z-10">
+      {/* Grid bg */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px)', backgroundSize: '80px 80px' }} />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#000_80%)]" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-8"
-        >
-          <h2 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight">
-            <span className="text-white">Projects</span>
-          </h2>
-          <p className="text-gray-500 text-lg max-w-md">
-            Selected projects showcasing full-stack development and modern web technologies
-          </p>
-        </motion.div>
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-12 sm:mb-16 gap-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-2 h-2 rounded-full bg-blue-400" />
+              <p className="text-gray-500 text-xs sm:text-sm tracking-[0.25em] uppercase font-light">My Work</p>
+              <div className="w-8 h-px bg-gray-700/60" />
+            </div>
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4">
+              <span className="text-white">Projects</span>
+            </h2>
+            <p className="text-gray-500 text-sm sm:text-base max-w-lg">
+              A collection of projects that demonstrate my skills, creativity and passion for building real-world solutions.
+            </p>
+          </motion.div>
+          {/* Folder HUD — desktop only */}
+          <motion.div className="hidden lg:block relative w-44 h-44 flex-shrink-0"
+            initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.3 }}>
+            <FolderHUD />
+          </motion.div>
+        </div>
 
         {/* Category Filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12"
-        >
-          <div className="flex flex-wrap gap-3">
+        <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10">
+          <div className="flex flex-wrap gap-2 sm:gap-3 overflow-x-auto pb-1">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                   selectedCategory === category
-                    ? 'bg-white text-black'
-                    : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10'
+                    ? 'bg-blue-500/20 text-blue-300 border border-blue-400/40 shadow-[0_0_12px_rgba(59,130,246,0.15)]'
+                    : 'bg-white/[0.03] text-gray-400 hover:bg-white/[0.06] hover:text-white border border-white/[0.06]'
                 }`}
               >
                 {category}
@@ -474,55 +608,80 @@ const Projects = () => {
           </div>
         </motion.div>
 
-        {/* Projects Grid - Clean Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           {filteredProjects.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group relative cursor-pointer"
-              onMouseEnter={() => setHoveredId(project.id)}
-              onMouseLeave={() => setHoveredId(null)}
+              transition={{ delay: Math.min(index * 0.08, 0.4) }}
+              className="group cursor-pointer"
               onClick={() => setSelectedProject(project)}
+              whileHover={{ y: -4 }}
             >
-              <div className="relative overflow-hidden rounded-2xl bg-neutral-900 border border-white/5 hover:border-white/20 transition-all duration-500 h-[350px]">
-                {/* Image */}
-                <div className="absolute inset-0">
-                  <OptimizedImage
-                    src={project.image}
-                    alt={project.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover opacity-50 group-hover:opacity-30 group-hover:scale-105 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
-                </div>
+              <div className="relative rounded-2xl border border-white/[0.06] group-hover:border-blue-400/20 bg-gradient-to-br from-white/[0.04] to-transparent transition-all duration-500 overflow-hidden h-[220px]">
+                {/* Blue glow on hover */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.06),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                {/* Content */}
-                <div className="absolute inset-0 p-6 flex flex-col justify-between">
-                  {/* Top */}
-                  <div className="flex justify-between items-start">
-                    <span className="text-xs text-white/80 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                      {project.category}
-                    </span>
-                    <span className="text-xs text-gray-400">{project.year}</span>
+                {/* Card layout: left info + right image */}
+                <div className="flex h-full">
+
+                  {/* Left: text content */}
+                  <div className="flex-1 p-5 flex flex-col justify-between min-w-0 overflow-hidden">
+                    <div>
+                      {/* Top row */}
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-[10px] text-blue-300/80 bg-blue-500/10 border border-blue-400/20 px-2.5 py-0.5 rounded-full font-medium">
+                          {project.category}
+                        </span>
+                        <span className="text-[10px] text-gray-500">{project.year}</span>
+                      </div>
+                      <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 group-hover:text-blue-50 transition-colors leading-tight">
+                        {project.title}
+                      </h3>
+                      <p className="text-gray-400 text-xs leading-relaxed line-clamp-3 mb-3">
+                        {project.shortDescription}
+                      </p>
+                      {/* Tech chips */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.techStack.slice(0, 3).map((tech) => (
+                          <span key={tech} className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.07] text-gray-400">{tech}</span>
+                        ))}
+                        {project.techStack.length > 3 && (
+                          <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.07] text-gray-500">+{project.techStack.length - 3}</span>
+                        )}
+                      </div>
+                    </div>
+                    {/* CTA buttons */}
+                    <div className="flex gap-2 mt-4">
+                      {project.liveUrl && (
+                        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/15 border border-blue-400/25 text-blue-300 text-[11px] font-medium hover:bg-blue-500/25 transition-all">
+                          <ExternalLink className="w-3 h-3" /><span>Live Demo</span>
+                        </a>
+                      )}
+                      {project.githubUrl && (
+                        <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/10 text-gray-300 text-[11px] font-medium hover:bg-white/10 transition-all">
+                          <Github className="w-3 h-3" /><span>GitHub</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Bottom */}
-                  <div>
-                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-gray-100 transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                      {project.shortDescription}
-                    </p>
-
-                    {/* Tech Stack - Single Line */}
-                    <div className="text-xs text-gray-400 truncate">
-                      {project.techStack.join(' • ')}
-                    </div>
+                  {/* Right: screenshot preview - fixed 42% width, full height */}
+                  <div className="w-[42%] flex-shrink-0 relative overflow-hidden border-l border-white/[0.05]">
+                    <OptimizedImage
+                      src={project.image}
+                      alt={project.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-black/30" />
                   </div>
                 </div>
               </div>
@@ -531,200 +690,152 @@ const Projects = () => {
         </div>
       </div>
 
-      {/* Modal */}
-      <AnimatePresence>
-        {selectedProject && (
-          <div className="modal-overlay" onClick={() => setSelectedProject(null)}>
-            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-              {/* Header */}
-              <div className="modal-header">
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-white/10 rounded-full text-white text-xs font-medium">
-                    {selectedProject.category}
-                  </span>
-                  <span className="text-gray-400 text-sm">{selectedProject.year}</span>
-                </div>
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                >
-                  <X className="w-5 h-5 text-white" />
-                </button>
-              </div>
+    </section>
 
-              {/* Scrollable Content */}
-              <div className="modal-content">
-                {/* Image Carousel - Reduced Height */}
-                {selectedProject.images && selectedProject.images.length > 0 && (
-                  <div className="mb-8 -mx-8 md:-mx-12 -mt-6">
-                    <div className="relative bg-neutral-800 border-b border-white/10" style={{ paddingBottom: '40%' }}>
-                      {/* Images */}
-                      {selectedProject.images.map((img, index) => (
-                        <OptimizedImage
-                          key={index}
-                          src={img}
-                          alt={`${selectedProject.title} screenshot ${index + 1}`}
-                          loading={index === 0 ? "eager" : "lazy"}
-                          priority={index === 0}
-                          className={`absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-700 ${
-                            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                          }`}
-                          style={{ 
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            borderRadius: '8px',
-                            margin: '16px'
-                          }}
-                        />
-                      ))}
-                      
-                      {/* Left Arrow */}
-                      {selectedProject.images.length > 1 && (
-                        <button
-                          onClick={() => setCurrentImageIndex((prev) => 
-                            prev === 0 ? selectedProject.images!.length - 1 : prev - 1
-                          )}
-                          className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/60 hover:bg-black/80 backdrop-blur-sm rounded-full text-white transition-all"
-                          aria-label="Previous image"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                          </svg>
-                        </button>
-                      )}
-                      
-                      {/* Right Arrow */}
-                      {selectedProject.images.length > 1 && (
-                        <button
-                          onClick={() => setCurrentImageIndex((prev) => 
-                            prev === selectedProject.images!.length - 1 ? 0 : prev + 1
-                          )}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/60 hover:bg-black/80 backdrop-blur-sm rounded-full text-white transition-all"
-                          aria-label="Next image"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </button>
-                      )}
-                      
-                      {/* Navigation Dots */}
-                      {selectedProject.images.length > 1 && (
-                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                          {selectedProject.images.map((_, index) => (
-                            <button
-                              key={index}
-                              onClick={() => setCurrentImageIndex(index)}
-                              className={`h-2 rounded-full transition-all ${
-                                index === currentImageIndex
-                                  ? 'bg-white w-8'
-                                  : 'bg-white/40 hover:bg-white/60 w-2'
-                              }`}
-                              aria-label={`View image ${index + 1}`}
-                            />
+      {createPortal(
+        <AnimatePresence>
+        {selectedProject && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+              {/* LEFT: header + scrollable info + footer */}
+              <div className="modal-left" style={{display:'flex',flexDirection:'column',flex:1,minWidth:0,overflow:'hidden'}}>
+                  <div className="modal-header">
+                    <div className="flex items-center gap-2.5">
+                      <span className="px-3 py-1 bg-blue-500/15 border border-blue-400/25 rounded-full text-blue-300 text-xs font-medium">{selectedProject.category}</span>
+                      <span className="text-gray-500 text-sm">{selectedProject.year}</span>
+                    </div>
+                    <button onClick={closeModal} className="p-2 hover:bg-white/[0.06] rounded-full transition-colors border border-transparent hover:border-white/10" aria-label="Close">
+                      <X className="w-5 h-5 text-gray-300" />
+                    </button>
+                  </div>
+                  <div
+                    className="modal-content"
+                    ref={contentRef}
+                    style={{flex:1,minHeight:0,overflowY:'auto',overflowX:'hidden',padding:'1.25rem 1.5rem',overscrollBehavior:'contain'}}
+                  >
+                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">{selectedProject.title}</h2>
+                    <p className="text-gray-500 text-xs mb-4">{selectedProject.category} · {selectedProject.year}</p>
+                    <div className="mb-4">
+                      <p className="text-[10px] text-blue-400/70 font-semibold tracking-[0.18em] uppercase mb-2">Overview</p>
+                      <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">{selectedProject.fullDescription}</p>
+                    </div>
+                    {selectedProject.features && selectedProject.features.length > 0 && (
+                      <div className="mb-4">
+                        <p className="text-[10px] text-blue-400/70 font-semibold tracking-[0.18em] uppercase mb-2">Key Features</p>
+                        <div className="flex flex-col gap-1.5">
+                          {selectedProject.features.map((f, i) => (
+                            <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'8px',padding:'8px 10px',background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.05)',borderRadius:'8px'}}>
+                              <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'rgba(99,162,255,0.6)',marginTop:'5px',flexShrink:0}} />
+                              <span className="text-gray-300 text-xs leading-relaxed">{f}</span>
+                            </div>
                           ))}
                         </div>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-[10px] text-blue-400/70 font-semibold tracking-[0.18em] uppercase mb-2">Built With</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {selectedProject.techStack.map((tech, i) => (
+                          <span key={i} style={{padding:'4px 10px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'8px',color:'#e2e8f0',fontSize:'11px',fontWeight:500}}>{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="modal-footer">
+                    <div className="flex gap-3">
+                      {selectedProject.githubUrl && (
+                        <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer"
+                          className="flex-1 py-2.5 bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white rounded-xl font-semibold text-sm text-center flex items-center justify-center gap-2 transition-all">
+                          <Github className="w-4 h-4" /><span>View Code</span>
+                        </a>
                       )}
-                      
-                      {/* Image Counter */}
-                      {selectedProject.images.length > 1 && (
-                        <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/70 backdrop-blur-sm rounded-lg text-white text-sm font-medium">
-                          {currentImageIndex + 1} / {selectedProject.images.length}
+                      {selectedProject.liveUrl ? (
+                        <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer"
+                          className="flex-1 py-2.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-400/30 text-blue-300 rounded-xl font-semibold text-sm text-center flex items-center justify-center gap-2 transition-all">
+                          <ExternalLink className="w-4 h-4" /><span>Live Demo</span>
+                        </a>
+                      ) : (
+                        <div className="flex-1 py-2.5 border border-white/[0.06] text-gray-600 rounded-xl font-semibold text-sm text-center flex items-center justify-center gap-2 cursor-not-allowed">
+                          <ExternalLink className="w-4 h-4" /><span>Coming Soon</span>
                         </div>
                       )}
                     </div>
                   </div>
-                )}
+              </div>{/* end modal-left */}
 
-                {/* Project Title */}
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                  {selectedProject.title}
-                </h2>
-
-                {/* Overview */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-white mb-3 uppercase tracking-wide text-sm">
-                    Overview
-                  </h3>
-                  <p className="text-gray-300 text-base leading-relaxed">
-                    {selectedProject.fullDescription}
-                  </p>
-                </div>
-
-                {/* Key Features - Compact Grid */}
-                {selectedProject.features && selectedProject.features.length > 0 && (
-                  <div className="mb-8">
-                    <h3 className="text-lg font-semibold text-white mb-4 uppercase tracking-wide text-sm">
-                      Key Features
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {selectedProject.features.map((feature, index) => (
-                        <div
-                          key={index}
-                          className="flex items-start gap-3 p-3 bg-neutral-800/30 rounded-lg border border-white/5 hover:border-white/10 transition-colors"
-                        >
-                          <div className="w-1 h-1 rounded-full bg-white mt-2 flex-shrink-0"></div>
-                          <span className="text-gray-300 text-sm leading-relaxed">{feature}</span>
-                        </div>
+              {/* RIGHT: image gallery */}
+              {selectedProject.images && selectedProject.images.length > 0 && (
+                <div className="modal-right">
+                  <div className="modal-right-viewer" style={{cursor:'zoom-in'}} onClick={() => setLightboxImage(selectedProject.images![currentImageIndex])}>
+                    {selectedProject.images.map((src, idx) => (
+                      <img key={idx} src={src} alt={`${selectedProject.title} ${idx+1}`}
+                        style={{opacity: idx===currentImageIndex ? 1 : 0}} />
+                    ))}
+                    <div className="modal-counter">{currentImageIndex+1} / {selectedProject.images.length}</div>
+                    {selectedProject.images.length > 1 && (
+                      <>
+                        <button className="modal-nav-btn prev" onClick={(e)=>{e.stopPropagation();setCurrentImageIndex(p=>p===0?selectedProject.images!.length-1:p-1)}}><ChevronLeft size={14}/></button>
+                        <button className="modal-nav-btn next" onClick={(e)=>{e.stopPropagation();setCurrentImageIndex(p=>p===selectedProject.images!.length-1?0:p+1)}}><ChevronRight size={14}/></button>
+                      </>
+                    )}
+                  </div>
+                  {selectedProject.images.length > 1 && (
+                    <div className="modal-thumb-strip">
+                      {selectedProject.images.map((src,i)=>(
+                        <button key={i} className={`modal-thumb${i===currentImageIndex?' active':''}`} onClick={()=>setCurrentImageIndex(i)}>
+                          <img src={src} alt="" />
+                        </button>
                       ))}
                     </div>
-                  </div>
-                )}
-
-                {/* Technologies */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-white mb-4 uppercase tracking-wide text-sm">
-                    Built With
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedProject.techStack.map((tech, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1.5 bg-neutral-800/60 rounded-md text-gray-200 text-sm font-medium border border-white/10"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="modal-footer">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  {selectedProject.githubUrl && (
-                    <a
-                      href={selectedProject.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 py-3 bg-white text-black rounded-lg font-semibold text-center flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors"
-                    >
-                      <Github className="w-4 h-4" />
-                      <span>View Code</span>
-                    </a>
-                  )}
-                  {selectedProject.liveUrl ? (
-                    <a
-                      href={selectedProject.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 py-3 border-2 border-white/20 text-white rounded-lg font-semibold text-center flex items-center justify-center gap-2 hover:bg-white/5 transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      <span>View Live</span>
-                    </a>
-                  ) : (
-                    <div className="flex-1 py-3 border-2 border-white/10 text-gray-500 rounded-lg font-semibold text-center flex items-center justify-center gap-2 cursor-not-allowed">
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Coming Soon</span>
-                    </div>
                   )}
                 </div>
-              </div>
+              )}
             </div>
           </div>
         )}
-      </AnimatePresence>
-    </section>
+        </AnimatePresence>
+      , document.body)}
+      {/* Lightbox: full-screen image view */}
+      {lightboxImage && createPortal(
+        <div
+          onClick={() => setLightboxImage(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 99999,
+            background: 'rgba(0,0,0,0.96)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'zoom-out', padding: '20px',
+            animation: 'modalOverlayIn 0.2s ease-out',
+          }}
+        >
+          {/* Close button */}
+          <button
+            onClick={() => setLightboxImage(null)}
+            style={{
+              position: 'absolute', top: 16, right: 16,
+              width: 36, height: 36, borderRadius: '50%',
+              background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+              color: 'white', fontSize: 18, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              zIndex: 2,
+            }}
+          >
+            <X size={18} />
+          </button>
+          <img
+            src={lightboxImage}
+            alt="Full size preview"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '95vw', maxHeight: '92vh',
+              objectFit: 'contain',
+              borderRadius: '8px',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.8)',
+            }}
+          />
+        </div>,
+        document.body
+      )}
+    </>
   );
 };
 

@@ -34,8 +34,10 @@ const Navbar = () => {
     <>
       {/* Desktop Navbar */}
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-black/90 backdrop-blur-md border-b border-white/10' : 'bg-transparent'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? 'bg-black/80 backdrop-blur-xl border-b border-white/[0.06]'
+            : 'bg-transparent'
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -56,29 +58,36 @@ const Navbar = () => {
             </motion.div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => handleNavigation(item.id)}
-                  className={`text-sm font-medium transition-colors duration-300 ${
-                    location.pathname === item.id
-                      ? 'text-white'
-                      : 'text-gray-500 hover:text-white'
-                  }`}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {item.label}
-                  {location.pathname === item.id && (
-                    <motion.div
-                      className="h-px bg-white mt-1"
-                      layoutId="underline"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                </motion.button>
-              ))}
+            <div className="hidden md:flex items-center space-x-1">
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.id;
+                return (
+                  <motion.button
+                    key={item.id}
+                    onClick={() => handleNavigation(item.id)}
+                    className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 ${
+                      isActive
+                        ? 'text-white'
+                        : 'text-gray-500 hover:text-gray-300'
+                    }`}
+                    whileHover={{ y: -1 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    {item.label}
+                    {isActive && (
+                      <motion.div
+                        className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-6 rounded-full"
+                        layoutId="navbar-underline"
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        style={{
+                          background: 'linear-gradient(90deg, transparent, rgba(100, 160, 255, 0.8), transparent)',
+                          boxShadow: '0 0 8px rgba(59, 130, 246, 0.5), 0 0 20px rgba(59, 130, 246, 0.2)',
+                        }}
+                      />
+                    )}
+                  </motion.button>
+                );
+              })}
             </div>
 
             {/* Mobile menu button */}
@@ -97,25 +106,33 @@ const Navbar = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-40 md:hidden bg-black"
+            className="fixed inset-0 z-40 md:hidden bg-black/95 backdrop-blur-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="flex flex-col items-center justify-center h-full space-y-8">
+            <div className="flex flex-col items-center justify-center h-full space-y-6">
               {navItems.map((item, index) => (
                 <motion.button
                   key={item.id}
                   onClick={() => handleNavigation(item.id)}
-                  className={`text-2xl font-medium ${
+                  className={`text-2xl font-medium tracking-tight ${
                     location.pathname === item.id ? 'text-white' : 'text-gray-500'
                   }`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.08 }}
                 >
                   {item.label}
+                  {location.pathname === item.id && (
+                    <div
+                      className="h-[2px] w-full mt-1 rounded-full"
+                      style={{
+                        background: 'linear-gradient(90deg, transparent, rgba(100, 160, 255, 0.8), transparent)',
+                      }}
+                    />
+                  )}
                 </motion.button>
               ))}
             </div>

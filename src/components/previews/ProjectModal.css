@@ -1,28 +1,53 @@
-/* Modal Scrolling Fix */
+/* ── Modal Overlay ──────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(12px);
-  z-index: 50;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  overflow: hidden !important;
+  animation: modalOverlayIn 0.25s ease-out;
 }
 
+@keyframes modalOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Modal Container: TWO COLUMNS side-by-side ─────────── */
 .modal-container {
   position: relative;
-  background: rgb(23, 23, 23);
-  border-radius: 1rem;
   width: 100%;
-  max-width: 75rem;
-  height: 85vh;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-width: 920px;
+  height: 88vh;
+  max-height: 88vh;
+  background: rgb(10, 10, 12);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  border-radius: 1.25rem;
+  box-shadow: 0 0 60px rgba(59,130,246,0.06), 0 25px 50px -12px rgba(0,0,0,0.8);
+  overflow: hidden;
+  /* KEY: row flex so left+right sit side by side */
+  display: flex;
+  flex-direction: row;
+  animation: modalSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Left panel: header + scrollable body + footer ─────── */
+.modal-left {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  /* CRITICAL: overflow hidden so children can scroll */
   overflow: hidden;
 }
 
@@ -31,43 +56,136 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgb(23, 23, 23);
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgb(10,10,12);
 }
 
+/* SCROLLABLE area — takes remaining space */
 .modal-content {
   flex: 1;
-  overflow-y: auto !important;
+  min-height: 0;          /* <-- CRITICAL for nested flex scroll */
+  overflow-y: auto;
   overflow-x: hidden;
-  padding: 1.5rem 2rem;
+  padding: 1.4rem 1.6rem;
+  scroll-behavior: smooth;
 }
 
-.modal-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.modal-content::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.modal-content::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-}
-
-.modal-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
+.modal-content::-webkit-scrollbar        { width: 5px; }
+.modal-content::-webkit-scrollbar-track  { background: transparent; }
+.modal-content::-webkit-scrollbar-thumb  { background: rgba(59,130,246,0.2); border-radius: 4px; }
+.modal-content::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,0.4); }
 
 .modal-footer {
   flex-shrink: 0;
-  padding: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgb(23, 23, 23);
+  padding: 1rem 1.4rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: rgb(10,10,12);
 }
 
-/* Prevent body scroll when modal is open */
-body.modal-open {
-  overflow: hidden !important;
+/* ── Right panel: image gallery ─────────────────────────── */
+.modal-right {
+  width: 44%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  background: #060608;
+  overflow: hidden;
+}
+
+.modal-right-viewer {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.modal-right-viewer img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+  transition: opacity 0.45s ease;
+}
+
+.modal-thumb-strip {
+  flex-shrink: 0;
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  overflow-x: auto;
+  background: rgba(0,0,0,0.35);
+}
+
+.modal-thumb-strip::-webkit-scrollbar       { height: 3px; }
+.modal-thumb-strip::-webkit-scrollbar-track { background: transparent; }
+.modal-thumb-strip::-webkit-scrollbar-thumb { background: rgba(99,162,255,0.25); border-radius: 2px; }
+
+.modal-thumb {
+  flex-shrink: 0;
+  width: 54px;
+  height: 38px;
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.08);
+  transition: border-color 0.2s;
+}
+.modal-thumb.active { border-color: rgba(99,162,255,0.75); }
+.modal-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.modal-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px;
+  background: rgba(0,0,0,0.65);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.modal-nav-btn.prev { left: 8px; }
+.modal-nav-btn.next { right: 8px; }
+
+.modal-counter {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 3px 9px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 6px;
+  color: white;
+  font-size: 11px;
+  z-index: 2;
+}
+
+/* ── Mobile: stack vertically ───────────────────────────── */
+@media (max-width: 640px) {
+  .modal-container {
+    flex-direction: column;
+    height: 95vh;
+    max-height: 95vh;
+    border-radius: 1rem;
+  }
+  .modal-right {
+    width: 100%;
+    height: 220px;
+    flex-shrink: 0;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    order: -1; /* image on top on mobile */
+  }
+  .modal-header { padding: 0.9rem 1rem; }
+  .modal-content { padding: 1rem; }
+  .modal-footer  { padding: 0.9rem 1rem; }
 }

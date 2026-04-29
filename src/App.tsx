@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import Preloader from './components/Preloader';
 import { useLenis } from './hooks/useLenis';
+import SocialSidebar from './components/SocialSidebar';
 
 // Lazy load non-critical pages
 const AboutPage = lazy(() => import('./pages/AboutPage'));
@@ -144,6 +145,9 @@ function App() {
     <Router>
       {/* Preloader */}
       {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
+      
+      {/* Social Sidebar - fixed, outside overflow containers */}
+      {!showPreloader && <SocialSidebar />}
       
       <div className="min-h-screen bg-black text-white overflow-x-hidden">
         {/* Minimal Background - Black & White Theme */}

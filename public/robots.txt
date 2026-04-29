@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jayshinde.vercel.app/sitemap.xml
+Sitemap: https://jayshinde.xyz/sitemap.xml

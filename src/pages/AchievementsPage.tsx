@@ -1,7 +1,56 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Award, Star, ExternalLink, Calendar, MapPin, Users, FileText, Globe, X } from 'lucide-react';
-import OptimizedImage from '../components/OptimizedImage';
+
+/* ── Floating Trophy HUD ── */
+const TrophyHUD = () => {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const raf = useRef(0);
+  useEffect(() => {
+    const c = ref.current; if (!c) return;
+    const ctx = c.getContext('2d')!;
+    let t = 0;
+    const particles: {x:number,y:number,s:number,a:number,v:number}[] = [];
+    for (let i = 0; i < 12; i++) particles.push({x:Math.random()*220,y:Math.random()*220,s:Math.random()*1.5+0.5,a:Math.random(),v:Math.random()*0.3+0.1});
+    const draw = () => {
+      ctx.clearRect(0, 0, 220, 220);
+      const cx = 110, cy = 110;
+      const g = ctx.createRadialGradient(cx, cy, 5, cx, cy, 100);
+      g.addColorStop(0, 'rgba(59,130,246,0.08)'); g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 220, 220);
+      // particles
+      particles.forEach(p => {
+        p.y -= p.v; p.a += 0.008;
+        if (p.y < 0) { p.y = 220; p.x = Math.random() * 220; }
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(99,162,255,${0.15 + Math.sin(p.a) * 0.1})`; ctx.fill();
+      });
+      // orbits
+      [55, 75, 92].forEach((r, i) => {
+        ctx.save(); ctx.translate(cx, cy); ctx.rotate(t * (1.2 - i * 0.3) + i);
+        ctx.beginPath(); ctx.ellipse(0, 0, r, r * 0.28, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(99,162,255,${0.14 - i * 0.03})`; ctx.lineWidth = 1; ctx.stroke(); ctx.restore();
+      });
+      // trophy
+      ctx.save(); ctx.translate(cx, cy + Math.sin(t * 1.8) * 3);
+      ctx.strokeStyle = 'rgba(99,162,255,0.65)'; ctx.lineWidth = 1.6;
+      ctx.shadowColor = 'rgba(99,162,255,0.5)'; ctx.shadowBlur = 12;
+      const s = 22;
+      ctx.beginPath();
+      ctx.moveTo(-s, -s*0.8); ctx.lineTo(-s*1.3, -s*1.8); ctx.lineTo(s*1.3, -s*1.8); ctx.lineTo(s, -s*0.8);
+      ctx.quadraticCurveTo(s*0.5, s*0.3, 0, s*0.5); ctx.quadraticCurveTo(-s*0.5, s*0.3, -s, -s*0.8); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-s, -s*1.4); ctx.quadraticCurveTo(-s*1.8, -s*0.8, -s, -s*0.3); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(s, -s*1.4); ctx.quadraticCurveTo(s*1.8, -s*0.8, s, -s*0.3); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-s*0.3, s*0.5); ctx.lineTo(-s*0.3, s*0.9); ctx.lineTo(s*0.3, s*0.9); ctx.lineTo(s*0.3, s*0.5); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-s*0.8, s*0.9); ctx.lineTo(s*0.8, s*0.9); ctx.stroke();
+      ctx.fillStyle = 'rgba(99,162,255,0.85)'; ctx.font = `${s*0.6}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('★', 0, -s*1.3); ctx.restore();
+      t += 0.012; raf.current = requestAnimationFrame(draw);
+    };
+    draw(); return () => cancelAnimationFrame(raf.current);
+  }, []);
+  return <canvas ref={ref} width={220} height={220} style={{display:'block'}} />;
+};
 
 const AchievementsPage = () => {
   const [activeTab, setActiveTab] = useState('achievements');
@@ -153,19 +202,27 @@ const AchievementsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-24 pb-16 bg-black relative z-10">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen pt-24 pb-16 relative z-10" style={{background:'linear-gradient(to bottom,#020204,#06060a,#020204)'}}>
+      {/* Grid bg */}
+      <div className="absolute inset-0 pointer-events-none" style={{backgroundImage:'linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px)',backgroundSize:'70px 70px'}} />
+      <div className="relative z-10 max-w-6xl mx-auto px-4">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-12"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold mb-4">
-            <span className="text-white">Achievements</span>
-          </h1>
-          <p className="text-gray-400">Accomplishments and activities beyond academics</p>
-        </motion.div>
+        <div className="flex items-start justify-between mb-14">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="flex items-center gap-2.5 mb-5">
+              <span className="w-2 h-2 rounded-full bg-blue-400" style={{boxShadow:'0 0 8px rgba(99,162,255,0.9)'}} />
+              <span className="text-[11px] tracking-[0.22em] text-blue-400/80 font-semibold uppercase">Beyond Academics</span>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-black text-white mb-5" style={{textShadow:'0 0 60px rgba(59,130,246,0.25)'}}>
+              Achievements
+            </h1>
+            <p className="text-gray-400 max-w-md">Milestones, recognitions and activities that reflect my passion, leadership and commitment to excellence.</p>
+          </motion.div>
+          {/* Trophy HUD - desktop */}
+          <motion.div className="hidden lg:block flex-shrink-0 -mt-4" initial={{opacity:0,scale:0.8}} animate={{opacity:1,scale:1}} transition={{duration:0.8,delay:0.2}}>
+            <TrophyHUD />
+          </motion.div>
+        </div>
 
         {/* Tabs */}
         <motion.div
@@ -174,20 +231,19 @@ const AchievementsPage = () => {
           transition={{ delay: 0.1 }}
           className="flex gap-2 mb-12 flex-wrap"
         >
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
-                activeTab === tab.id
-                  ? 'bg-white text-black'
-                  : 'border border-white/20 text-gray-400 hover:text-white hover:border-white/40'
-              }`}
-            >
-              <tab.icon className="w-4 h-4" />
-              {tab.label}
-            </button>
-          ))}
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                className="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2"
+                style={isActive
+                  ? {background:'rgba(59,130,246,0.15)',border:'1px solid rgba(99,162,255,0.4)',color:'#93c5fd',boxShadow:'0 0 16px rgba(59,130,246,0.2)'}
+                  : {background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.08)',color:'#6b7280'}}>
+                <tab.icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            );
+          })}
         </motion.div>
 
         {/* Content */}
@@ -205,32 +261,26 @@ const AchievementsPage = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="border border-white/10 rounded-2xl overflow-hidden bg-neutral-900 cursor-pointer hover:border-white/20 transition-all"
+                  className="group rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-1"
+                  style={{background:'linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))',border:'1px solid rgba(255,255,255,0.06)',boxShadow:'0 4px 30px rgba(0,0,0,0.3)'}}
                   onClick={() => setSelectedAchievement(item)}
+                  onMouseEnter={e=>(e.currentTarget.style.border='1px solid rgba(99,162,255,0.2)')}
+                  onMouseLeave={e=>(e.currentTarget.style.border='1px solid rgba(255,255,255,0.06)')}
                 >
                   <div className="grid lg:grid-cols-2 gap-0">
                     {/* Image */}
-                    <div className="h-64 lg:h-auto bg-neutral-800 flex items-center justify-center p-4">
-                      <img
-                        src={`/${item.imageFile}`}
-                        alt={item.title}
-                        className="w-full h-full object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'https://via.placeholder.com/600x400?text=Achievement';
-                        }}
+                    <div className="h-64 lg:h-auto overflow-hidden" style={{background:'#0a0a0c'}}>
+                      <img src={`/${item.imageFile}`} alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {(e.target as HTMLImageElement).style.display='none';}}
                       />
                     </div>
                     
                     {/* Content */}
                     <div className="p-6 lg:p-8">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 border border-white/20 rounded-lg text-white">
-                          {item.icon}
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-white">{item.title}</h3>
-                          <p className="text-sm text-gray-400">{item.event}</p>
-                        </div>
+                      <div className="mb-4">
+                        <h3 className="text-lg font-bold text-white leading-snug">{item.title}</h3>
+                        <p className="text-sm text-blue-400/80 font-medium mt-1">{item.event}</p>
                       </div>
 
                       <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
@@ -246,19 +296,22 @@ const AchievementsPage = () => {
 
                       <div className="flex flex-wrap gap-2 mb-4">
                         {item.skills.slice(0, 4).map((skill, i) => (
-                          <span key={i} className="text-xs border border-white/10 px-2 py-1 rounded text-gray-400">
+                          <span key={i} className="text-[11px] px-2.5 py-1 rounded-full text-gray-400"
+                            style={{background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)'}}>
                             {skill}
                           </span>
                         ))}
                         {item.skills.length > 4 && (
-                          <span className="text-xs border border-white/10 px-2 py-1 rounded text-gray-400">
+                          <span className="text-[11px] px-2.5 py-1 rounded-full text-gray-400"
+                            style={{background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)'}}>
                             +{item.skills.length - 4} more
                           </span>
                         )}
                       </div>
 
-                      <div className="text-sm text-white/60 hover:text-white transition-colors">
-                        Click to view details →
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-blue-300 transition-all"
+                        style={{background:'rgba(59,130,246,0.12)',border:'1px solid rgba(99,162,255,0.25)'}}>
+                        View Details <ExternalLink className="w-3.5 h-3.5" />
                       </div>
                     </div>
                   </div>
@@ -275,29 +328,23 @@ const AchievementsPage = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="border border-white/10 rounded-2xl overflow-hidden bg-neutral-900 cursor-pointer hover:border-white/20 transition-all"
+                  className="group rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-1"
+                  style={{background:'linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))',border:'1px solid rgba(255,255,255,0.06)'}}
+                  onMouseEnter={e=>(e.currentTarget.style.border='1px solid rgba(99,162,255,0.2)')}
+                  onMouseLeave={e=>(e.currentTarget.style.border='1px solid rgba(255,255,255,0.06)')}
                   onClick={() => setSelectedAchievement(item)}
                 >
                   <div className="grid lg:grid-cols-3 gap-0">
-                    <div className="h-48 lg:h-auto bg-neutral-800 flex items-center justify-center p-4">
-                      <img
-                        src={`/${item.imageFile}`}
-                        alt={item.title}
-                        className="w-full h-full object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300?text=Activity';
-                        }}
+                    <div className="h-48 lg:h-auto overflow-hidden" style={{background:'#0a0a0c'}}>
+                      <img src={`/${item.imageFile}`} alt={item.title}
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                        onError={(e) => {(e.target as HTMLImageElement).style.display='none';}}
                       />
                     </div>
                     <div className="lg:col-span-2 p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 border border-white/20 rounded-lg text-white">
-                          {item.icon}
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-bold text-white">{item.title}</h3>
-                          <p className="text-sm text-gray-400">{item.organization}</p>
-                        </div>
+                      <div className="mb-3">
+                        <h3 className="text-lg font-bold text-white">{item.title}</h3>
+                        <p className="text-sm text-blue-400/70 mt-0.5">{item.organization}</p>
                       </div>
                       <p className="text-xs text-gray-500 mb-3">{item.duration}</p>
                       <p className="text-gray-300 text-sm mb-4 line-clamp-2">{item.description}</p>
@@ -313,8 +360,9 @@ const AchievementsPage = () => {
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-white/60 hover:text-white transition-colors">
-                        Click to view details →
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-blue-300 transition-all"
+                        style={{background:'rgba(59,130,246,0.12)',border:'1px solid rgba(99,162,255,0.25)'}}>
+                        View Details <ExternalLink className="w-3.5 h-3.5" />
                       </div>
                     </div>
                   </div>
@@ -331,22 +379,21 @@ const AchievementsPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="border border-white/10 rounded-xl overflow-hidden bg-neutral-900"
+                  className="group rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1"
+                  style={{background:'linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))',border:'1px solid rgba(255,255,255,0.06)'}}
+                  onMouseEnter={e=>(e.currentTarget.style.border='1px solid rgba(99,162,255,0.2)')}
+                  onMouseLeave={e=>(e.currentTarget.style.border='1px solid rgba(255,255,255,0.06)')}
                 >
-                  <div className="h-40 bg-neutral-800 flex items-center justify-center p-2">
-                    <img
-                      src={`/${cert.imageFile}`}
-                      alt={cert.title}
-                      className="w-full h-full object-contain"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=Certificate';
-                      }}
+                  <div className="h-40 overflow-hidden" style={{background:'#0a0a0c'}}>
+                    <img src={`/${cert.imageFile}`} alt={cert.title}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {(e.target as HTMLImageElement).style.display='none';}}
                     />
                   </div>
                   <div className="p-4">
-                    <h3 className="font-medium text-white text-sm mb-1">{cert.title}</h3>
-                    <p className="text-xs text-gray-400">{cert.issuer}</p>
-                    <p className="text-xs text-gray-500 mt-1">{cert.date}</p>
+                    <h3 className="font-bold text-white text-sm mb-1">{cert.title}</h3>
+                    <p className="text-xs text-blue-400/70">{cert.issuer}</p>
+                    <p className="text-xs text-gray-500 mt-1.5">{cert.date}</p>
                   </div>
                 </motion.div>
               ))}
@@ -366,21 +413,17 @@ const AchievementsPage = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-neutral-900 border border-white/10 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+              className="rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+              style={{background:'linear-gradient(135deg,rgba(12,12,16,0.98),rgba(8,8,12,0.99))',border:'1px solid rgba(99,162,255,0.15)',boxShadow:'0 0 60px rgba(59,130,246,0.08)'}}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="sticky top-0 bg-neutral-900 border-b border-white/10 p-6 flex items-start justify-between z-10">
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="p-2 border border-white/20 rounded-lg text-white">
-                    {selectedAchievement.icon}
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">{selectedAchievement.title}</h2>
-                    <p className="text-sm text-gray-400">
-                      {selectedAchievement.event || selectedAchievement.organization}
-                    </p>
-                  </div>
+              <div className="sticky top-0 border-b border-white/10 p-6 flex items-start justify-between z-10" style={{background:'rgba(12,12,16,0.95)',backdropFilter:'blur(12px)'}}>
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold text-white">{selectedAchievement.title}</h2>
+                  <p className="text-sm text-blue-400/80 mt-1">
+                    {selectedAchievement.event || selectedAchievement.organization}
+                  </p>
                 </div>
                 <button
                   onClick={() => setSelectedAchievement(null)}
