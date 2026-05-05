@@ -268,7 +268,7 @@ const Terminal: React.FC<{ className?: string }> = ({ className }) => {
               📖 View Full Resume
             </button>
             <a
-              href="/resume.pdf"
+              href="https://drive.google.com/file/d/1FbGmxQ2r6MwOU5fBy9TMpT518og_p5uR/view?usp=drive_link"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded transition-all transform hover:scale-105 inline-block"

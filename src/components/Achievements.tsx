@@ -48,6 +48,15 @@ const TrophyHUD = () => {
 const achievements = [
   {
     icon: <Trophy className="w-6 h-6" />,
+    title: "Srijan 2026 - National Hackathon Winner 🏆",
+    subtitle: 'Atos Global IT Solutions and Services - 1st Place',
+    year: '2026', location: 'National Level Competition',
+    description: "Secured 1st place among 500-600 competing teams at Srijan 2026, a prestigious national-level hackathon organized by Atos Global IT Solutions and Services. Demonstrated exceptional problem-solving skills, innovative thinking, and technical excellence to emerge as champions in this highly competitive event. The victory showcases our team's ability to deliver cutting-edge solutions under pressure and collaborate effectively to tackle complex real-world challenges.",
+    tags: ['National Winner', 'Hackathon', 'Innovation', 'Team Leadership', 'Problem Solving', 'Atos'],
+    image: '/Srijan.webp',
+  },
+  {
+    icon: <Trophy className="w-6 h-6" />,
     title: "SpectraX'26 (AIMSS Flagship AI/ML Hackathon)",
     subtitle: 'StudyAssist AI – AI-Powered Adaptive Study Assistant',
     year: '2026', location: 'VIT Bhiwewadi',

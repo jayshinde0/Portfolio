@@ -55,8 +55,43 @@ const TrophyHUD = () => {
 const AchievementsPage = () => {
   const [activeTab, setActiveTab] = useState('achievements');
   const [selectedAchievement, setSelectedAchievement] = useState<any>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Lock body scroll when modal is open and scroll modal to top
+  useEffect(() => {
+    if (selectedAchievement) {
+      document.body.style.overflow = 'hidden';
+      // Scroll modal container to top
+      if (modalRef.current) {
+        modalRef.current.scrollTop = 0;
+      }
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedAchievement]);
 
   const achievements = [
+    {
+      icon: <Trophy className="w-6 h-6" />,
+      title: "Srijan 2026 - National Hackathon Winner 🏆",
+      event: "Atos Global IT Solutions and Services - 1st Place",
+      date: "2026",
+      location: "National Level Competition",
+      description: "Secured 1st place among 500-600 competing teams at Srijan 2026, a prestigious national-level hackathon organized by Atos Global IT Solutions and Services. Demonstrated exceptional problem-solving skills, innovative thinking, and technical excellence to emerge as champions in this highly competitive event.",
+      skills: ["National Winner", "Hackathon", "Innovation", "Team Leadership", "Problem Solving", "Atos"],
+      imageFile: "Srijan.webp",
+      highlights: [
+        "Secured 1st place among 500-600 competing teams",
+        "National-level hackathon organized by Atos Global IT Solutions",
+        "Demonstrated exceptional problem-solving and technical excellence",
+        "Led team to victory through innovative thinking and collaboration",
+        "Delivered cutting-edge solutions under competitive pressure"
+      ],
+      fullDescription: "Srijan 2026 was a prestigious national-level hackathon organized by Atos Global IT Solutions and Services, bringing together 500-600 of the brightest minds from across the country. Our team emerged as champions by demonstrating exceptional problem-solving skills, innovative thinking, and technical excellence throughout the competition. The victory showcases our ability to deliver cutting-edge solutions under pressure and collaborate effectively to tackle complex real-world challenges. This achievement represents not just technical prowess, but also leadership, teamwork, and the ability to think creatively under competitive conditions. The recognition from Atos Global IT Solutions and Services, a leading digital transformation company, validates our approach to solving real-world problems with innovative technology solutions."
+    },
     {
       icon: <Trophy className="w-6 h-6" />,
       title: "SpectraX'26 (AIMSS Flagship AI/ML Hackathon)",
@@ -405,33 +440,38 @@ const AchievementsPage = () => {
       {/* Achievement Detail Modal */}
       <AnimatePresence>
         {selectedAchievement && (
-          <div 
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 overflow-y-auto"
             onClick={() => setSelectedAchievement(null)}
+            ref={modalRef}
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-              style={{background:'linear-gradient(135deg,rgba(12,12,16,0.98),rgba(8,8,12,0.99))',border:'1px solid rgba(99,162,255,0.15)',boxShadow:'0 0 60px rgba(59,130,246,0.08)'}}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="sticky top-0 border-b border-white/10 p-6 flex items-start justify-between z-10" style={{background:'rgba(12,12,16,0.95)',backdropFilter:'blur(12px)'}}>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-white">{selectedAchievement.title}</h2>
-                  <p className="text-sm text-blue-400/80 mt-1">
-                    {selectedAchievement.event || selectedAchievement.organization}
-                  </p>
+            <div className="min-h-screen flex items-center justify-center p-4 py-8">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="rounded-2xl max-w-4xl w-full"
+                style={{background:'linear-gradient(135deg,rgba(12,12,16,0.98),rgba(8,8,12,0.99))',border:'1px solid rgba(99,162,255,0.15)',boxShadow:'0 0 60px rgba(59,130,246,0.08)'}}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Header */}
+                <div className="border-b border-white/10 p-6 flex items-start justify-between" style={{background:'rgba(12,12,16,0.95)'}}>
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-white">{selectedAchievement.title}</h2>
+                    <p className="text-sm text-blue-400/80 mt-1">
+                      {selectedAchievement.event || selectedAchievement.organization}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setSelectedAchievement(null)}
+                    className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5 text-white" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setSelectedAchievement(null)}
-                  className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                >
-                  <X className="w-5 h-5 text-white" />
-                </button>
-              </div>
 
               {/* Modal Content */}
               <div className="p-6">
@@ -521,8 +561,9 @@ const AchievementsPage = () => {
                   </a>
                 )}
               </div>
-            </motion.div>
-          </div>
+              </motion.div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

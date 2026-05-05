@@ -377,7 +377,7 @@ const Hero = () => {
               >
                 View My Work
               </motion.button>
-              <a href="/resume.pdf" download>
+              <a href="https://drive.google.com/file/d/1FbGmxQ2r6MwOU5fBy9TMpT518og_p5uR/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
                 <motion.button
                   className="hero-btn-secondary"
                   whileHover={{ scale: 1.04 }}
