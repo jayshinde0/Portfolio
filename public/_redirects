@@ -1,0 +1,5 @@
+# Force Netlify subdomain -> custom domain (avoid duplicate indexing)
+https://jayshindeportfolio.netlify.app/* https://jayshinde.xyz/:splat 301!
+
+# SPA fallback (React Router)
+/* /index.html 200
