@@ -206,6 +206,29 @@ const Projects = () => {
       year: '2026'
     },
     {
+      id: 17,
+      title: 'UPI Offline Mesh Network',
+      shortDescription: 'Production-quality simulation of offline UPI payments via Bluetooth-style mesh propagation with hybrid encryption',
+      fullDescription: 'A production-quality simulation of offline UPI payments for low-connectivity environments. A user in a basement without internet sends ₹500 to another user; the encrypted payment packet propagates hop-by-hop through nearby devices using a simulated Bluetooth-style mesh (gossip + TTL). Eventually a bridge node regains connectivity and uploads the packet to the backend where it is settled safely. The system uses AES-256-GCM for payload encryption with RSA-OAEP key wrapping, SHA-256 integrity hashing for tamper detection, Redis SETNX idempotency keys to prevent double-settlement, and optimistic locking to safely debit/credit balances under concurrency. Includes real-time updates over WebSocket (STOMP over SockJS), analytics dashboards, and an admin panel.',
+      techStack: ['React', 'Vite', 'Tailwind CSS', 'Zustand', 'Java 17', 'Spring Boot 3.2', 'Spring Security', 'PostgreSQL', 'Redis', 'WebSocket (STOMP/SockJS)', 'Docker', 'Swagger/OpenAPI'],
+      image: '/upimes1.png',
+      images: ['/upimes1.png', '/upimes2.png', '/upimes3.jpeg', '/upimes4.jpeg', '/upimesh5.jpeg'],
+      category: 'Full Stack',
+      githubUrl: '',
+      liveUrl: '',
+      features: [
+        'Offline Mesh Propagation - Bluetooth-style gossip simulation with TTL-based packet hopping',
+        'Hybrid Encryption - AES-256-GCM payload encryption + RSA-OAEP key wrapping',
+        'Tamper Detection - SHA-256 packet hashing validated on bridge settlement',
+        'Safe Settlement - Redis SETNX idempotency + optimistic locking for concurrent balance updates',
+        'Real-time Events - STOMP over SockJS topics for propagation, packets, and settlements',
+        'Full Platform - Auth (JWT + refresh), transactions history, analytics dashboards, admin panel',
+        'Dockerized Stack - PostgreSQL + Redis + backend + frontend via Docker Compose',
+        'Swagger UI - API docs via Springdoc OpenAPI'
+      ],
+      year: '2026'
+    },
+    {
       id: 2,
       title: 'StudyAssist AI',
       shortDescription: 'Adaptive study platform with AI-powered quiz generation',
